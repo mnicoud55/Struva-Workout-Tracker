@@ -1,1 +1,5 @@
-<?php echo "Hello World @^_^@" ?>
+<?php
+require("connect-db.php");
+require("workout-db.php");
+
+echo "Hello World" ?>
