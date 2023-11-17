@@ -32,7 +32,9 @@ $user001_friends = getFriendWorkouts("U001");
 
 <div class="container">
   <h1>DB programming: Get Started</h1>  
-  <!-- <form name="privacyForm" action="simpleform.php" method="post">
+  <!-- 
+    Start on dropdown:
+    <form name="privacyForm" action="simpleform.php" method="post">
     <label for="privacySelect">Select a privacy level:</label>
     <select name="privacySelect" id="privacySelect">
         <option value="Public">Public</option>
