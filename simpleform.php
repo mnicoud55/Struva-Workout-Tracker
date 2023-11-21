@@ -6,11 +6,30 @@ $list_of_workouts = getAllWorkouts();
 $list_of_public_workouts = getPublicWorkouts();
 $user001_workouts = getPersonalWorkouts("U001");
 $user001_friends = getFriendWorkouts("U001");
-
+$results = getPublicWorkouts();
 // if ($_SERVER['REQUEST_METHOD'] == 'POST')
 // {
 // }
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+  $filter = $_POST['privacyFilter'];
+  $userID = "U001"; // Assuming a user ID, replace with actual user ID
+
+  switch ($filter) {
+      case 'public':
+          $results = getPublicWorkouts();
+          break;
+      case 'private':
+          $results = getPersonalWorkouts($userID);
+          break;
+      case 'friends':
+          $results = getFriendWorkouts($userID);
+          break;
+  }
+
+
+}
 ?>
+
 
 
 
@@ -31,14 +50,51 @@ $user001_friends = getFriendWorkouts("U001");
         body {
             background-color: lightgray;
         }
+        /* Style for the button group to have black borders */
+.btn-group .btn {
+    border: 1px solid black;
+}
+
+/* Style for the active button */
+.active {
+    text-decoration: underline;
+    font-weight: bold;
+}
+
+/* Optional: Remove rounded corners for a more seamless look */
+.btn-group .btn {
+    border-radius: 0;
+}
+
     </style>
 </head>
 
 <body>
 <?php include("header.html"); ?>  
+<!-- <form action="simpleform.php" method="post">
+        <label for="privacyFilter">Choose a filter:</label>
+        <select name="privacyFilter" id="privacyFilter">
+            <option value="public">Public</option>
+            <option value="private">Private</option>
+            <option value="friends">Friends</option>
+        </select>
+        <input type="submit" value="Filter">
+    </form> -->
+    <?php 
+$currentFilter = $_SERVER["REQUEST_METHOD"] == "POST" ? $_POST['privacyFilter'] : 'public';
+?>
+<!-- Form for the buttons to select the filters -->
+<form action="simpleform.php" method="post">
+<div class="btn-group" role="group" aria-label="Filter Buttons">
+    <button type="submit" name="privacyFilter" value="public" class="btn btn-outline-info btn-lg <?php echo $currentFilter == 'public' ? 'active' : ''; ?>">Public</button>
+    <button type="submit" name="privacyFilter" value="private" class="btn btn-outline-info btn-lg <?php echo $currentFilter == 'private' ? 'active' : ''; ?>">Private</button>
+    <button type="submit" name="privacyFilter" value="friends" class="btn btn-outline-info btn-lg <?php echo $currentFilter == 'friends' ? 'active' : ''; ?>">Friends</button>
+</div>
 
+</form>
+    
 <div class="container">
-  <h1>DB programming: Get Started</h1>  
+  <h1>Workout Feed</h1>  
   <!-- 
     Start on dropdown:
     <form name="privacyForm" action="simpleform.php" method="post">
@@ -56,12 +112,13 @@ $user001_friends = getFriendWorkouts("U001");
 <table class="w3-table w3-bordered w3-card-4 center" style="width:70%">
   <thead>
   <tr style="background-color:#B0B0B0">
-    <th width="30%">WorkoutID        
+    <th width="30%">UserID 
+    <!-- <th width="30%">WorkoutID         -->
     <th width="30%">Duration        
     <th width="30%">Notes 
     <th width="30%">Date 
-    <th width="30%">Privacy 
-    <th width="30%">UserID 
+    <!-- <th width="30%">Privacy  -->
+    
 
     <th>&nbsp;</th>
     <th>&nbsp;</th>
@@ -69,14 +126,16 @@ $user001_friends = getFriendWorkouts("U001");
   </thead>
 
 
-<?php foreach ($user001_friends as $workout): ?>
+<?php foreach ($results as $workout): ?>
   <tr>
-     <td><?php echo $workout['WorkoutID']; ?></td>   <!-- column name --> 
+    <td><?php echo $workout['UserID']; ?></td>  
+     <!-- <td><//?php echo $workout['WorkoutID']; ?></td>    -->
+     <!-- column name --> 
      <td><?php echo $workout['Duration']; ?></td>        
      <td><?php echo $workout['Notes']; ?></td>  
      <td><?php echo $workout['Date']; ?></td>  
-     <td><?php echo $workout['Privacy']; ?></td>  
-     <td><?php echo $workout['UserID']; ?></td>  
+     <!-- <td><//?php echo $workout['Privacy']; ?></td>   -->
+     
   </tr>
 <?php endforeach; ?>
 </table>
