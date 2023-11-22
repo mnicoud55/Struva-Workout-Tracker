@@ -3,7 +3,16 @@ require("connect-db.php");
 require("friend-db.php");
 
 
-$list_of_U001_friends = LoadFriendRequests("U001");
+
+
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $requestID = $_POST['request_id'];
+    AcceptFriendRequest("U001",$requestID); //the first parameter is self, the sent is second
+    // Redirect back or show a success message
+}
+$list_of_U001_requests = LoadFriendRequests("U001");
+$list_of_U001_friends = LoadFriends("U001");
 ?>
 <!DOCTYPE html>
 <html>
@@ -46,22 +55,52 @@ th, td {
   <table>
     <thead>
         <tr>
-            <th>Friend ID</th>
+            <th>Current Friend Requests</th>
             <!-- Add more headers if needed -->
         </tr>
     </thead>
     <tbody>
     <?php 
-    $list_of_U001_friends = LoadFriendRequests("U001");
-    foreach ($list_of_U001_friends as $friendRequest) {
-        echo '<tr>';
-        echo '<td>' . htmlspecialchars($friendRequest['sent_request_id']) . '</td>';
-        echo '</tr>';
-    }
-    ?>
+            $list_of_U001_requests = LoadFriendRequests("U001");
+            foreach ($list_of_U001_requests as $friendRequest) {
+                echo '<tr>';
+                echo '<td>' . htmlspecialchars($friendRequest['sent_request_id']) . '</td>';
+                // Add a form with a button for each friend request
+                echo '<td>';
+                echo '<form action="friendpage.php" method="post">';
+                echo '<input type="hidden" name="request_id" value="' . htmlspecialchars($friendRequest['sent_request_id']) . '">';
+                echo '<input type="submit" value="Accept">';
+                echo '</form>';
+                echo '</td>';
+                echo '</tr>';
+            }
+            ?>
 
     </tbody>
 </table>
+
+
+<table>
+    <thead>
+        <tr>
+            <th>Friend List: </th>
+            <!-- Add more headers if needed -->
+        </tr>
+    </thead>
+    <tbody>
+    <?php 
+        $list_of_U001_friends = LoadFriends("U001");
+        foreach ($list_of_U001_friends as $friend) {
+            echo '<tr>';
+            // Access specific elements of the $friend array
+            // Replace 'attribute_name' with the actual key name from the $friend array
+            echo '<td>' . htmlspecialchars($friend['friend2_id']) . '</td>';
+            echo '</tr>';
+        }
+    ?>
+    </tbody>
+</table>
+
 
 
   <?php include("footer.html"); ?>
