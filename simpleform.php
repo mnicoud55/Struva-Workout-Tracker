@@ -2,27 +2,25 @@
 require("connect-db.php");
 require("workout-db.php");
 
-$list_of_workouts = getAllWorkouts();
-$list_of_public_workouts = getPublicWorkouts();
-$user001_workouts = getPersonalWorkouts("U001");
-$user001_friends = getFriendWorkouts("U001");
-$results = getPublicWorkouts();
-// if ($_SERVER['REQUEST_METHOD'] == 'POST')
-// {
-// }
+$list_of_workouts = array_reverse(getAllWorkouts());
+$list_of_public_workouts = array_reverse(getPublicWorkouts());
+$user001_workouts = array_reverse(getPersonalWorkouts("U001"));
+$user001_friends = array_reverse(getFriendWorkouts("U001"));
+$results = array_reverse(getPublicWorkouts());
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $filter = $_POST['privacyFilter'];
   $userID = "U001"; // Assuming a user ID, replace with actual user ID
 
   switch ($filter) {
       case 'public':
-          $results = getPublicWorkouts();
+          $results = array_reverse(getPublicWorkouts());
           break;
       case 'private':
-          $results = getPersonalWorkouts($userID);
+          $results = array_reverse(getPersonalWorkouts($userID));
           break;
       case 'friends':
-          $results = getFriendWorkouts($userID);
+          $results = array_reverse(getFriendWorkouts($userID));
           break;
   }
 
@@ -127,8 +125,21 @@ $currentFilter = $_SERVER["REQUEST_METHOD"] == "POST" ? $_POST['privacyFilter'] 
           <h4><?php echo $workout['UserID']; ?></h4>
         </div>
         <div class="card-body">
-          <p>Duration: <?php echo $workout['Duration']; ?></p>
-          <p>Notes: <?php echo $workout['Notes']; ?></p>
+          <?php 
+            $res = "";
+            foreach ($workout as $key => $value):
+              if (is_int($key)) {
+
+              } 
+              elseif ($key != "WorkoutID" & $key != "Date" & $key != "UserID" & $key != "Privacy") {
+                $res .= $key; 
+                $res .= ": "; 
+                $res .= $value;
+                $res .= "<br>\n";
+              }
+            endforeach;
+            echo $res;
+          ?>
 
           <p>Posted: <?php 
           $date = new DateTime($workout['Date']);
