@@ -47,7 +47,4 @@ function getFriendWorkouts($userID)
 }
 
 
-//SELECT * from Workout WHERE privacy = friends and UserID = (SELECT DISTINCT(Friend2_id) FROM Friends WHERE Friend1_id = selfID);
-
-
 ?>
