@@ -46,5 +46,113 @@ function getFriendWorkouts($userID)
     return $results;
 }
 
+function getCircuitTraining($workoutID)
+{
+    global $db;
+    $query = "select * from Circuit_Exercise where Workout_ID = :workoutID";
+    $statement = $db->prepare($query);
+    $statement->bindValue(":workoutID", $workoutID);
+    $statement->execute();
+    $results = $statement->fetchAll();
+    $statement->closeCursor();
+    return $results;
+}
+
+function getCycling($workoutID)
+{
+    global $db;
+    $query = "select * from Cycling where WorkoutID = :workoutID";
+    $statement = $db->prepare($query);
+    $statement->bindValue(":workoutID", $workoutID);
+    $statement->execute();
+    $results = $statement->fetchAll();
+    $statement->closeCursor();
+    return $results;
+}
+
+function getFlexibilityTraining($workoutID)
+{
+    global $db;
+    $query = "select * from Flexibility_Training where WorkoutID = :workoutID";
+    $statement = $db->prepare($query);
+    $statement->bindValue(":workoutID", $workoutID);
+    $statement->execute();
+    $results = $statement->fetchAll();
+    $statement->closeCursor();
+    return $results;
+}
+
+function getHiking($workoutID)
+{
+    global $db;
+    $query = "select * from Hiking where WorkoutID = :workoutID";
+    $statement = $db->prepare($query);
+    $statement->bindValue(":workoutID", $workoutID);
+    $statement->execute();
+    $results = $statement->fetchAll();
+    $statement->closeCursor();
+    return $results;
+}
+
+function getPlayingASport($workoutID)
+{
+    global $db;
+    $query = "select * from Playing_a_Sport where WorkoutID = :workoutID";
+    $statement = $db->prepare($query);
+    $statement->bindValue(":workoutID", $workoutID);
+    $statement->execute();
+    $results = $statement->fetchAll();
+    $statement->closeCursor();
+    return $results;
+}
+
+function getRun($workoutID)
+{
+    global $db;
+    $query = "select * from Run where WorkoutID = :workoutID";
+    $statement = $db->prepare($query);
+    $statement->bindValue(":workoutID", $workoutID);
+    $statement->execute();
+    $results = $statement->fetchAll();
+    $statement->closeCursor();
+    return $results;
+}
+
+function getStrengthTraining($workoutID)
+{
+    global $db;
+    $query = "select * from Strength_Training where WorkoutID = :workoutID";
+    $statement = $db->prepare($query);
+    $statement->bindValue(":workoutID", $workoutID);
+    $statement->execute();
+    $results = $statement->fetchAll();
+    $statement->closeCursor();
+    return $results;
+}
+
+function getSwim($workoutID)
+{
+    global $db;
+    $query = "select * from Swim where WorkoutID = :workoutID";
+    $statement = $db->prepare($query);
+    $statement->bindValue(":workoutID", $workoutID);
+    $statement->execute();
+    $results = $statement->fetchAll();
+    $statement->closeCursor();
+    return $results;
+}
+
+function getWaterSports($workoutID)
+{
+    global $db;
+    $query = "select * from Water_Sports where WorkoutID = :workoutID";
+    $statement = $db->prepare($query);
+    $statement->bindValue(":workoutID", $workoutID);
+    $statement->execute();
+    $results = $statement->fetchAll();
+    $statement->closeCursor();
+    return $results;
+}
+
 
 ?>

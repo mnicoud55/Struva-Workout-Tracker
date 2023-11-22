@@ -23,9 +23,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           $results = array_reverse(getFriendWorkouts($userID));
           break;
   }
-
-
 }
+
+
+
 ?>
 
 
@@ -138,6 +139,41 @@ $currentFilter = $_SERVER["REQUEST_METHOD"] == "POST" ? $_POST['privacyFilter'] 
                 $res .= "<br>\n";
               }
             endforeach;
+
+            //checking for each specific workout 
+            //Please note this will be the most ungodly code known to man but it should work
+            $Circuit_Training = getCircuitTraining($workout['WorkoutID']);
+            $Cycling = getCycling($workout['WorkoutID']);
+            $Flexibility_Training = getFlexibilityTraining($workout['WorkoutID']);
+            $Hiking = getHiking($workout['WorkoutID']);
+            $Playing_a_Sport = getPlayingASport($workout['WorkoutID']);
+            $Run = getRun($workout['WorkoutID']);
+            $Strength_Training = getStrengthTraining($workout['WorkoutID']);
+            $Swim = getSwim($workout['WorkoutID']);
+            $Water_Sports = getWaterSports($workout['WorkoutID']);
+
+
+            if (count($Circuit_Training) > 0) {
+              //add actual output later
+              $res .= "circuit training <br>\n";
+            } else if (count($Cycling) > 0) {
+              $res .= "cycling <br>\n";
+            } else if (count($Flexibility_Training) > 0){
+              $res .= "flexibility training <br>\n";
+            } else if (count($Hiking) > 0){
+              $res .= "hiking<br>\n";
+            } else if (count($Playing_a_Sport) > 0){
+              $res .= "playing a sport<br>\n";
+            } else if (count($Run) > 0){
+              $res .= "run<br>\n";
+            } else if (count($Strength_Training) > 0){
+              $res .= "strength training<br>\n";
+            } else if (count($Swim) > 0) {
+              $res .= "swim";
+            } else if (count($Water_Sports)){
+              $res .= "water sports";
+            }
+
             echo $res;
           ?>
 
