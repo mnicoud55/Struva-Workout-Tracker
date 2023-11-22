@@ -60,12 +60,36 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     text-decoration: underline;
     font-weight: bold;
 }
-
-/* Optional: Remove rounded corners for a more seamless look */
+.btn-group {
+  display: flex;
+    justify-content: center;
+}
+/* Remove rounded corners for a more seamless look */
 .btn-group .btn {
     border-radius: 0;
 }
+.workout-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #f9f9f9;
+  }
 
+  .card-header {
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+  }
+
+  .card-body p {
+    margin: 0 0 10px;
+  }
+
+  .container {
+    max-width: 800px;
+    margin: auto;
+  }
     </style>
 </head>
 
@@ -87,60 +111,38 @@ $currentFilter = $_SERVER["REQUEST_METHOD"] == "POST" ? $_POST['privacyFilter'] 
 <form action="simpleform.php" method="post">
 <div class="btn-group" role="group" aria-label="Filter Buttons">
     <button type="submit" name="privacyFilter" value="public" class="btn btn-outline-info btn-lg <?php echo $currentFilter == 'public' ? 'active' : ''; ?>">Public</button>
-    <button type="submit" name="privacyFilter" value="private" class="btn btn-outline-info btn-lg <?php echo $currentFilter == 'private' ? 'active' : ''; ?>">Private</button>
     <button type="submit" name="privacyFilter" value="friends" class="btn btn-outline-info btn-lg <?php echo $currentFilter == 'friends' ? 'active' : ''; ?>">Friends</button>
+    <button type="submit" name="privacyFilter" value="private" class="btn btn-outline-info btn-lg <?php echo $currentFilter == 'private' ? 'active' : ''; ?>">Private</button>
 </div>
 
 </form>
-    
+  <!--Cards to display each of the workouts that are fetched -->
 <div class="container">
-  <h1>Workout Feed</h1>  
-  <!-- 
-    Start on dropdown:
-    <form name="privacyForm" action="simpleform.php" method="post">
-    <label for="privacySelect">Select a privacy level:</label>
-    <select name="privacySelect" id="privacySelect">
-        <option value="Public">Public</option>
-        <option value="Friends">Friends</option>
-        <option value="Private">Private</option>
-    </select>
-    <input type="submit" name="privactBtn" class="btn btn-primary" />
-  </form> -->
-<hr/>
-<h3>List of Workouts</h3>
-<div class="row justify-content-center">  
-<table class="w3-table w3-bordered w3-card-4 center" style="width:70%">
-  <thead>
-  <tr style="background-color:#B0B0B0">
-    <th width="30%">UserID 
-    <!-- <th width="30%">WorkoutID         -->
-    <th width="30%">Duration        
-    <th width="30%">Notes 
-    <th width="30%">Date 
-    <!-- <th width="30%">Privacy  -->
-    
+  <h1><b>Workout Feed</b></h1>  
+  <hr/>
+  <div class="row">
+    <?php foreach ($results as $workout): ?>
+      <div class="workout-card">
+        <div class="card-header">
+          <h4><?php echo $workout['UserID']; ?></h4>
+        </div>
+        <div class="card-body">
+          <p>Duration: <?php echo $workout['Duration']; ?></p>
+          <p>Notes: <?php echo $workout['Notes']; ?></p>
 
-    <th>&nbsp;</th>
-    <th>&nbsp;</th>
-  </tr>
-  </thead>
-
-
-<?php foreach ($results as $workout): ?>
-  <tr>
-    <td><?php echo $workout['UserID']; ?></td>  
-     <!-- <td><//?php echo $workout['WorkoutID']; ?></td>    -->
-     <!-- column name --> 
-     <td><?php echo $workout['Duration']; ?></td>        
-     <td><?php echo $workout['Notes']; ?></td>  
-     <td><?php echo $workout['Date']; ?></td>  
-     <!-- <td><//?php echo $workout['Privacy']; ?></td>   -->
-     
-  </tr>
-<?php endforeach; ?>
-</table>
-</div>  
-
+          <p>Posted: <?php 
+          $date = new DateTime($workout['Date']);
+          //Formatting of each of the gotten dates
+          $formattedDate = $date->format('F j, Y');
+          echo $formattedDate; 
+          
+          ?></p>
+          
+        </div>
+      </div>
+    <?php endforeach; ?>
+  </div>
+</div>
 
 
   <!-- CDN for JS bootstrap -->

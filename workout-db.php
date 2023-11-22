@@ -1,22 +1,5 @@
 <?php
-function addFriend($friendname, $major, $year) 
-{
-  global $db; 
-//   $query = "insert into friends values ('" . $friendname . "', '" . $major . "'," . $year .") ";
-  // $db->query($query);  // compile + exe
 
-  $query = "insert into friends values (:friendname, :major, :year) ";
-  // prepare: 
-  // 1. prepare (compile) 
-  // 2. bindValue + exe
-
-  $statement = $db->prepare($query); 
-  $statement->bindValue(':friendname', $friendname);
-  $statement->bindValue(':major', $major);
-  $statement->bindValue(':year', $year);
-  $statement->execute();
-  $statement->closeCursor();
-}
 
 function getAllWorkouts()
 {
