@@ -37,7 +37,7 @@ function getPersonalWorkouts($userID)
 function getFriendWorkouts($userID)
 {
     global $db;
-    $query = "select * from Workout where (Privacy = 'Friends' or Privacy = 'Public') and UserID = (select distinct (Friend2_id) from Friends where Friend1_id = :userID)";
+    $query = "select * from Workout where (Privacy = 'Friends' or Privacy = 'Public') and UserID IN (select distinct (Friend2_id) from Friends where Friend1_id = :userID)";
     $statement = $db->prepare($query);
     $statement->bindValue(":userID", $userID);
     $statement->execute();

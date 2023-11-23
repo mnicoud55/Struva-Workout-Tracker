@@ -7,10 +7,31 @@ require("friend-db.php");
 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $requestID = $_POST['request_id'];
-    AcceptFriendRequest("U001",$requestID); //the first parameter is self, the sent is second
-    // Redirect back or show a success message
+    if (isset($_POST['accept'])) {
+        $requestID = $_POST['request_id'];
+        AcceptFriendRequest("U001", $requestID);
+        // Redirect or show a success message for acceptance
+    } elseif (isset($_POST['decline'])) {
+        $requestID = $_POST['request_id'];
+        DeclineFriendRequest("U001", $requestID);
+        // Redirect or show a success message for declining
+    }
 }
+$searchResults = [];
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (isset($_POST['search'])) {
+        $searchTerm = $_POST['search_term'];
+        $searchResults = SearchUsers($searchTerm); // Function to search users based on input
+    } elseif (isset($_POST['send_request'])) {
+        $targetUserID = $_POST['target_user_id'];
+        SendFriendRequest("U001", $targetUserID); // Assuming "U001" is the ID of the current user
+        // Optionally, handle redirection or success message here
+    }
+}
+$sentRequests = PendingSentFriendRequests("U001");
+
+
+
 $list_of_U001_requests = LoadFriendRequests("U001");
 $list_of_U001_friends = LoadFriends("U001");
 ?>
@@ -52,6 +73,40 @@ th, td {
   <body>
   <?php include("header.html"); ?>  
 
+  <!-- Add Friend Bar -->
+  <form action="friendpage.php" method="post">
+    <input type="text" name="search_term" placeholder="Enter UserID or Name">
+    <input type="submit" name="search" value="Search">
+  </form>
+  
+  
+  <!-- Display Search Results -->
+  <?php if (!empty($searchResults)): ?>
+    <table>
+      <thead>
+        <tr>
+          <th>User ID</th>
+          <th>Name</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php foreach ($searchResults as $user): ?>
+          <tr>
+            <td><?= htmlspecialchars($user['UserID']) ?></td>
+            <td><?= htmlspecialchars($user['Name']) ?></td>
+            <td>
+              <form action="friendpage.php" method="post">
+              <input type="hidden" name="target_user_id" value="<?= htmlspecialchars($user['UserID']) ?>">
+                <input type="submit" name="send_request" value="Send Friend Request">
+              </form>
+            </td>
+          </tr>
+        <?php endforeach; ?>
+      </tbody>
+    </table>
+  <?php endif; ?>
+
   <table>
     <thead>
         <tr>
@@ -65,20 +120,43 @@ th, td {
             foreach ($list_of_U001_requests as $friendRequest) {
                 echo '<tr>';
                 echo '<td>' . htmlspecialchars($friendRequest['sent_request_id']) . '</td>';
-                // Add a form with a button for each friend request
+                // Accept form
                 echo '<td>';
                 echo '<form action="friendpage.php" method="post">';
                 echo '<input type="hidden" name="request_id" value="' . htmlspecialchars($friendRequest['sent_request_id']) . '">';
-                echo '<input type="submit" value="Accept">';
+                echo '<input type="submit" name="accept" value="Accept">';
                 echo '</form>';
                 echo '</td>';
-                echo '</tr>';
+
+                // Decline form
+                echo '<td>';
+                echo '<form action="friendpage.php" method="post">';
+                echo '<input type="hidden" name="request_id" value="' . htmlspecialchars($friendRequest['sent_request_id']) . '">';
+                echo '<input type="submit" name="decline" value="Decline">';
+                echo '</form>';
+                echo '</td>';
             }
             ?>
 
     </tbody>
 </table>
-
+<table>
+        <thead>
+            <tr>
+                <th>Sent Friend Requests</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php 
+            foreach ($sentRequests as $request) {
+                echo '<tr>';
+                echo '<td>' . htmlspecialchars($request['received_request_id']) . '</td>';
+                // You can add more columns if necessary
+                echo '</tr>';
+            }
+            ?>
+        </tbody>
+    </table>
 
 <table>
     <thead>
