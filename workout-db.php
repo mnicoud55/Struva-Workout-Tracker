@@ -49,7 +49,7 @@ function getFriendWorkouts($userID)
 function getCircuitTraining($workoutID)
 {
     global $db;
-    $query = "select * from Circuit_Exercise where Workout_ID = :workoutID";
+    $query = "select * from Circuit_Training where WorkoutID = :workoutID";
     $statement = $db->prepare($query);
     $statement->bindValue(":workoutID", $workoutID);
     $statement->execute();

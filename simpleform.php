@@ -128,17 +128,6 @@ $currentFilter = $_SERVER["REQUEST_METHOD"] == "POST" ? $_POST['privacyFilter'] 
         <div class="card-body">
           <?php 
             $res = "";
-            foreach ($workout as $key => $value):
-              if (is_int($key)) {
-
-              } 
-              elseif ($key != "WorkoutID" & $key != "Date" & $key != "UserID" & $key != "Privacy") {
-                $res .= $key; 
-                $res .= ": "; 
-                $res .= $value;
-                $res .= "<br>\n";
-              }
-            endforeach;
 
             //checking for each specific workout 
             //Please note this will be the most ungodly code known to man but it should work
@@ -155,23 +144,48 @@ $currentFilter = $_SERVER["REQUEST_METHOD"] == "POST" ? $_POST['privacyFilter'] 
 
             if (count($Circuit_Training) > 0) {
               //add actual output later
-              $res .= "circuit training <br>\n";
+              $res .= "<u>Circuit Training</u> <br>\n";
+              $workout = $Circuit_Training[0] + $workout;
             } else if (count($Cycling) > 0) {
-              $res .= "cycling <br>\n";
+              $res .= "<u>Cycling</u> <br>\n";
+              $workout = $Cycling[0] + $workout;
             } else if (count($Flexibility_Training) > 0){
-              $res .= "flexibility training <br>\n";
+              $res .= "<u>Flexibility Training</u> <br>\n";
+              $workout = $Flexibility_Training[0] + $workout;
             } else if (count($Hiking) > 0){
-              $res .= "hiking<br>\n";
+              $res .= "<u>Hiking</u> <br>\n";
+              $workout = $Hiking[0] + $workout;
             } else if (count($Playing_a_Sport) > 0){
-              $res .= "playing a sport<br>\n";
+              $res .= "<u>Playing a Sport</u> <br>\n";
+              $workout = $Playing_a_Sport[0] + $workout;
             } else if (count($Run) > 0){
-              $res .= "run<br>\n";
+              $res .= "<u>Run</u> <br>\n";
+              $workout = $Run[0] + $workout;
             } else if (count($Strength_Training) > 0){
-              $res .= "strength training<br>\n";
+              $res .= "<u>Strength Training</u> <br>\n";
+              $workout = $Strength_Training[0] + $workout;
             } else if (count($Swim) > 0) {
-              $res .= "swim";
+              $res .= "<u>Swim</u> <br>\n";
+              $workout = $Swim[0] + $workout;
             } else if (count($Water_Sports)){
-              $res .= "water sports";
+              $res .= "<u>Water Sports</u> <br>\n";
+              $workout = $Water_Sports[0] + $workout;
+            }
+
+            foreach ($workout as $key => $value) {
+              if (is_int($key)) {
+
+              } 
+              elseif ($key != "WorkoutID" & $key != "Date" & $key != "UserID" & $key != "Privacy") {
+                $visibleKey = str_replace('_', ' ', $key);
+                $res .= ucwords($visibleKey); 
+                $res .= ": "; 
+                $res .= $value;
+                if ($key == "Duration") {
+                  $res .= " minutes";
+                }
+                $res .= "<br>\n";
+              }
             }
 
             echo $res;
