@@ -58,6 +58,18 @@ function getCircuitTraining($workoutID)
     return $results;
 }
 
+function getCircuitExercises($workoutID)
+{
+    global $db;
+    $query = "select * from Circuit_Exercise where WorkoutID = :workoutID";
+    $statement = $db->prepare($query);
+    $statement->bindValue(":workoutID", $workoutID);
+    $statement->execute();
+    $results = $statement->fetchAll();
+    $statement->closeCursor();
+    return $results;
+}
+
 function getCycling($workoutID)
 {
     global $db;
@@ -74,6 +86,18 @@ function getFlexibilityTraining($workoutID)
 {
     global $db;
     $query = "select * from Flexibility_Training where WorkoutID = :workoutID";
+    $statement = $db->prepare($query);
+    $statement->bindValue(":workoutID", $workoutID);
+    $statement->execute();
+    $results = $statement->fetchAll();
+    $statement->closeCursor();
+    return $results;
+}
+
+function getFlexibilityStretches($workoutID)
+{
+    global $db;
+    $query = "select * from Flexibility_Stretch where WorkoutID = :workoutID";
     $statement = $db->prepare($query);
     $statement->bindValue(":workoutID", $workoutID);
     $statement->execute();
@@ -122,6 +146,18 @@ function getStrengthTraining($workoutID)
 {
     global $db;
     $query = "select * from Strength_Training where WorkoutID = :workoutID";
+    $statement = $db->prepare($query);
+    $statement->bindValue(":workoutID", $workoutID);
+    $statement->execute();
+    $results = $statement->fetchAll();
+    $statement->closeCursor();
+    return $results;
+}
+
+function getStrengthExercises($workoutID)
+{
+    global $db;
+    $query = "select * from Strength_Exercise where WorkoutID = :workoutID";
     $statement = $db->prepare($query);
     $statement->bindValue(":workoutID", $workoutID);
     $statement->execute();

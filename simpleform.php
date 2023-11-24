@@ -167,17 +167,83 @@ $currentFilter = $_SERVER["REQUEST_METHOD"] == "POST" ? $_POST['privacyFilter'] 
             } else if (count($Swim) > 0) {
               $res .= "<u>Swim</u> <br>\n";
               $workout = $Swim[0] + $workout;
-            } else if (count($Water_Sports)){
+            } else if (count($Water_Sports) > 0){
               $res .= "<u>Water Sports</u> <br>\n";
               $workout = $Water_Sports[0] + $workout;
+            }
+
+            // adds individual exercises/stretches
+            if (count($Circuit_Training) > 0) {
+              $Circuit_Exercises = getCircuitExercises($workout['WorkoutID']);
+              foreach ($Circuit_Exercises as $exercise) {
+                foreach ($exercise as $key => $value) {
+                  if (is_int($key)) {
+
+                  } 
+                  elseif ($key != "WorkoutID" && $key != "Reps_or_Seconds") {
+                    $visibleKey = str_replace('_', ' ', $key);
+                    if ($visibleKey == "Type") {
+                      $visibleKey = "Exercise";
+                    }
+                    $res .= ucwords($visibleKey); 
+                    $res .= ": "; 
+                    $res .= $value;
+                    if ($visibleKey == "Amount") {
+                      $res .= " ";
+                      $res .= lcfirst($exercise['Reps_or_Seconds']);
+                    }
+                    $res .= "<br>\n";
+                  }
+                }
+              }
+            }
+            elseif (count($Flexibility_Training) > 0) {
+              $Flexibility_Stretches = getFlexibilityStretches($workout['WorkoutID']);
+              foreach ($Flexibility_Stretches as $stretch) {
+                foreach ($stretch as $key => $value) {
+                  if (is_int($key)) {
+
+                  } 
+                  elseif ($key != "WorkoutID") {
+                    $visibleKey = str_replace('_', ' ', $key);
+                    if ($visibleKey == "Type") {
+                      $visibleKey = "Stretch";
+                    }
+                    $res .= ucwords($visibleKey); 
+                    $res .= ": "; 
+                    $res .= $value;
+                    $res .= "<br>\n";
+                  }
+                }
+              }
+            }
+            elseif (count($Strength_Training) > 0) {
+              $Strength_Exercises = getStrengthExercises($workout['WorkoutID']);
+              foreach ($Strength_Exercises as $exercise) {
+                foreach ($exercise as $key => $value) {
+                  if (is_int($key)) {
+
+                  } 
+                  elseif ($key != "WorkoutID") {
+                    $visibleKey = str_replace('_', ' ', $key);
+                    $res .= ucwords($visibleKey); 
+                    $res .= ": "; 
+                    $res .= $value;
+                    $res .= "<br>\n";
+                  }
+                }
+              }
             }
 
             foreach ($workout as $key => $value) {
               if (is_int($key)) {
 
               } 
-              elseif ($key != "WorkoutID" & $key != "Date" & $key != "UserID" & $key != "Privacy") {
+              elseif ($key != "WorkoutID" && $key != "Date" && $key != "UserID" && $key != "Privacy") {
                 $visibleKey = str_replace('_', ' ', $key);
+                if ($key == "Duration") {
+                  $visibleKey = "Total Duration";
+                }
                 $res .= ucwords($visibleKey); 
                 $res .= ": "; 
                 $res .= $value;
