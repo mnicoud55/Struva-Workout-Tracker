@@ -43,7 +43,9 @@ function LoadFriends($userID){
 }
 function SearchUsers($searchTerm){
     global $db;
-    $query = "SELECT UserID, Name FROM Users WHERE UserID = :searchTerm OR Name = :searchTerm;";
+    $query = "SELECT UserID, Name 
+    FROM Users 
+    WHERE UserID LIKE CONCAT(:searchTerm, '%') OR Name LIKE CONCAT(:searchTerm, '%');";
     $statement = $db->prepare($query); 
     $statement->bindValue(":searchTerm", $searchTerm);
     $statement->execute();

@@ -106,7 +106,9 @@ th, td {
       </tbody>
     </table>
   <?php endif; ?>
-
+  <?php if (empty($searchResults)): ?>
+    No Found Results
+    <?php endif; ?>
   <table>
     <thead>
         <tr>
