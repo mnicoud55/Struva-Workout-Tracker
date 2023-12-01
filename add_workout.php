@@ -7,20 +7,42 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $workoutType = $_POST['workoutType'];
     // Process general Workout fields
     // ...
+    addWorkout($_POST);
+    $current_userID = $_POST['userID'];
+    $current_workoutID = getWorkoutID($current_userID);
 
-    // Based on the workout type, process additional fields
     switch ($workoutType) {
         case 'Circuit_Training':
             addCircuitTraining($_POST);
             break;
-        // Handle other cases similarly
+        case 'Cycling':
+            addCycling($_POST);
+            break;
+        case 'Flexibility_Training':
+            addFlexibilityTraining($_POST);
+            break;
+        case 'Hiking':
+            addHiking($_POST, $current_workoutID);
+            break;
+        case 'Playing_a_Sport':
+            addPlayingASport($_POST);
+            break;
+        case 'Run':
+            addRun($_POST);
+            break;
+        case 'Strength_Training':
+            addStrengthTraining($_POST);
+            break;
+        case 'Swim':
+            addSwim($_POST);
+            break;
+        case 'Water_Sports':
+            addWaterSports($_POST);
+            break;
+        // Add additional cases as needed
     }
 }
 
-function addCircuitTraining($data) {
-    // Function to add Circuit Training workout
-    // ...
-}
 
 
 
@@ -98,7 +120,7 @@ input[type="submit"]:hover {
 
 
     <!-- Content goes here -->
-    <form action="process_workout.php" method="post" id="workoutForm">
+    <form action="add_workout.php" method="post" id="workoutForm">
         <!-- Dropdown for selecting workout type -->
         <select name="workoutType" id="workoutType" onchange="showAdditionalFields()">
     <option value="">Select Workout Type</option>
@@ -115,11 +137,18 @@ input[type="submit"]:hover {
 
 
         <!-- Fields for the Workout table -->
-        <input type="text" name="duration" placeholder="Duration">
+        <input type="int" name="duration" placeholder="Duration">
         <textarea name="notes" placeholder="Notes"></textarea>
         <input type="date" name="date">
-        <input type="text" name="privacy" placeholder="Privacy"> <!-- Need to make this a dropdown with 3 options -->
+        <label for="privacy">Privacy:</label>
+    <select name="privacy" id="privacy">
+        <option value="Public">Public</option>
+        <option value="Friends">Friends</option>
+        <option value="Private">Personal</option>
+    </select>
         <!-- Need to make this a hidden input <input type="text" name="userId" placeholder="User ID"> --> 
+        <input type="hidden" name="userID" value="U001">
+        <!-- Dynamic version <input type="hidden" name="userId" value="<?php echo htmlspecialchars($userId); ?>"> -->
 
         <!-- Additional fields will be displayed here -->
         <div id="additionalFields"></div>
@@ -144,7 +173,7 @@ input[type="submit"]:hover {
             // Add other fields specific to Flexibility Training
         } else if (workoutType === "Hiking") {
             additionalFields.innerHTML += "<input type='text' name='trailName' placeholder='Trail Name'>";
-            additionalFields.innerHTML += "<input type='text' name='hikingDistance' placeholder='Distance'>";
+            additionalFields.innerHTML += "<input type='int' name='hikingDistance' placeholder='Distance'>";
             additionalFields.innerHTML += "<input type='text' name='hikingPace' placeholder='Pace'>";
             additionalFields.innerHTML += "<input type='number' name='elevationChange' placeholder='Elevation Change'>";
             // Add other fields specific to Hiking
