@@ -44,7 +44,18 @@ function getWorkoutID($userID) {
 function addCircuitTraining($data, $workoutID) {
     // Function to add Circuit Training workout
     // ...
-    global $db; 
+    global $db;
+
+    $query = "INSERT INTO Circuit_Training VALUES (:workoutID, :numCircuits)";
+    $statement = $db->prepare($query); 
+
+    // Bind values from the $data array
+    $statement->bindValue(":workoutID", $workoutID);
+    $statement->bindValue(":numCircuits", $data['numCircuits']);
+
+    $statement->execute();
+    
+    $statement->closeCursor();
 
 }
 
@@ -69,6 +80,19 @@ function addCycling($data, $workoutID) {
 function addFlexibilityTraining($data, $workoutID) {
     // Function to add Flexibility Training workout
     // ...
+    global $db;
+
+    $query = "INSERT INTO Flexibility_Training VALUES (:workoutID, :bodyPartFocus)";
+    $statement = $db->prepare($query); 
+
+    // Bind values from the $data array
+    $statement->bindValue(":workoutID", $workoutID);
+    $statement->bindValue(":bodyPartFocus", $data['bodyPartFocus']);
+
+    $statement->execute();
+    
+    $statement->closeCursor();
+
 }
 
 function addHiking($data, $workoutID) {
@@ -129,6 +153,19 @@ function addRun($data, $workoutID) {
 function addStrengthTraining($data, $workoutID) {
     // Function to add Strength Training workout
     // ...
+    global $db;
+
+    $query = "INSERT INTO Strength_Training VALUES (:workoutID, :muscleGroup)";
+    $statement = $db->prepare($query); 
+
+    // Bind values from the $data array
+    $statement->bindValue(":workoutID", $workoutID);
+    $statement->bindValue(":muscleGroup", $data['muscleGroup']);
+
+    $statement->execute();
+    
+    $statement->closeCursor();
+
 }
 
 function addSwim($data, $workoutID) {

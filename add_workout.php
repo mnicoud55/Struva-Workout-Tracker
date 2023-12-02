@@ -31,6 +31,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             break;
         case 'Strength_Training':
             addStrengthTraining($_POST, $workoutID);
+            if (isset($_POST['strengthExercises'])) {
+                for ($i = 0; $i < count($_POST['strengthExercises']); $i++) {
+                    $exerciseName = $_POST['strengthExercises'][$i];
+                    $weight = $_POST['strengthWeights'][$i];
+                    $reps = $_POST['strengthReps'][$i];
+                    $sets = $_POST['strengthSets'][$i];
+                    
+                    // Insert each exercise into the database
+                    // Ensure to handle and sanitize data appropriately
+                }
+            }
             break;
         case 'Swim':
             addSwim($_POST, $workoutID);
@@ -188,11 +199,24 @@ input[type="submit"]:hover {
                     "    <option value='Outdoor'>Outdoor</option>" +
                     "</select>";
 
-    additionalFields.innerHTML = runFields;
+            additionalFields.innerHTML = runFields;
             // Add other fields specific to Running
         } else if (workoutType === "Strength_Training") {
             additionalFields.innerHTML += "<input type='text' name='muscleGroup' placeholder='Muscle Group'>";
+            additionalFields.innerHTML += "<div id='strengthTrainingSection'> <button type='button' id='addStrengthExercise'>Add Strength Exercise</button> </div>"
             // Add other fields specific to Strength Training
+
+        
+                document.getElementById('addStrengthExercise').addEventListener('click', function() {
+                    var container = document.getElementById('strengthTrainingSection');
+                    var exerciseDiv = document.createElement('div');
+                    exerciseDiv.innerHTML = '<input type="text" name="strengthExercises[]" placeholder="Exercise Name">' +
+                                            '<input type="number" name="strengthWeights[]" placeholder="Weight">' +
+                                            '<input type="number" name="strengthReps[]" placeholder="Reps">' +
+                                            '<input type="number" name="strengthSets[]" placeholder="Sets">';
+                    container.appendChild(exerciseDiv);
+                });
+            
         } else if (workoutType === "Swim") {
             var swimFields = "<input type='text' name='swimmingPace' placeholder='Pace'>" +
                      "<input type='number' name='swimmingDistance' placeholder='Distance'> <br>" +
