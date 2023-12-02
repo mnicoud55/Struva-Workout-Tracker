@@ -1,43 +1,42 @@
 <?php
 require("connect-db.php");
 require("add_workout-db.php");
-
+//Workout table needs to be modified with this:
+//ALTER TABLE Workout MODIFY COLUMN WorkoutID int NOT NULL AUTO_INCREMENT PRIMARY KEY; 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $workoutType = $_POST['workoutType'];
     // Process general Workout fields
     // ...
-    addWorkout($_POST);
-    $current_userID = $_POST['userID'];
-    $current_workoutID = getWorkoutID($current_userID);
+    $workoutID = addWorkout($_POST);
 
     switch ($workoutType) {
         case 'Circuit_Training':
-            addCircuitTraining($_POST);
+            addCircuitTraining($_POST, $workoutID);
             break;
         case 'Cycling':
-            addCycling($_POST);
+            addCycling($_POST, $workoutID);
             break;
         case 'Flexibility_Training':
-            addFlexibilityTraining($_POST);
+            addFlexibilityTraining($_POST, $workoutID);
             break;
         case 'Hiking':
-            addHiking($_POST, $current_workoutID);
+            addHiking($_POST, $workoutID);
             break;
         case 'Playing_a_Sport':
-            addPlayingASport($_POST);
+            addPlayingASport($_POST, $workoutID);
             break;
         case 'Run':
-            addRun($_POST);
+            addRun($_POST, $workoutID);
             break;
         case 'Strength_Training':
-            addStrengthTraining($_POST);
+            addStrengthTraining($_POST, $workoutID);
             break;
         case 'Swim':
-            addSwim($_POST);
+            addSwim($_POST, $workoutID);
             break;
         case 'Water_Sports':
-            addWaterSports($_POST);
+            addWaterSports($_POST, $workoutID);
             break;
         // Add additional cases as needed
     }
@@ -166,7 +165,7 @@ input[type="submit"]:hover {
             // Add other fields specific to Circuit Training
         } else if (workoutType === "Cycling") {
             additionalFields.innerHTML += "<input type='text' name='pace' placeholder='Pace'>";
-            additionalFields.innerHTML += "<input type='text' name='distance' placeholder='Distance'>";
+            additionalFields.innerHTML += "<input type='int' name='distance' placeholder='Distance'>";
             // Add other fields specific to Cycling
         } else if (workoutType === "Flexibility_Training") {
             additionalFields.innerHTML += "<input type='text' name='bodyPartFocus' placeholder='Body Part Focus'>";
@@ -181,18 +180,34 @@ input[type="submit"]:hover {
             additionalFields.innerHTML += "<input type='text' name='sportName' placeholder='Sport Name'>";
             // Add other fields specific to Playing a Sport
         } else if (workoutType === "Run") {
-            additionalFields.innerHTML += "<input type='text' name='runningPace' placeholder='Pace'>";
-            additionalFields.innerHTML += "<input type='text' name='runningDistance' placeholder='Distance'>";
-            additionalFields.innerHTML += "<input type='text' name='indoorOutdoor' placeholder='Indoor or Outdoor'>";
+    var runFields = "<input type='text' name='runningPace' placeholder='Pace'>" +
+                    "<input type='number' name='runningDistance' placeholder='Distance'> <br>" +
+                    "<label for='indoorOutdoor'>Indoors or Outdoors:</label>" +
+                    "<select name='indoorOutdoor' id='indoorOutdoor'>" +
+                    "    <option value='Indoor'>Indoor</option>" +
+                    "    <option value='Outdoor'>Outdoor</option>" +
+                    "</select>";
+
+    additionalFields.innerHTML = runFields;
             // Add other fields specific to Running
         } else if (workoutType === "Strength_Training") {
             additionalFields.innerHTML += "<input type='text' name='muscleGroup' placeholder='Muscle Group'>";
             // Add other fields specific to Strength Training
         } else if (workoutType === "Swim") {
-            additionalFields.innerHTML += "<input type='text' name='swimmingPace' placeholder='Pace'>";
-            additionalFields.innerHTML += "<input type='text' name='swimmingDistance' placeholder='Distance'>";
-            additionalFields.innerHTML += "<input type='text' name='yardsMeters' placeholder='Yards or Meters'>";
-            additionalFields.innerHTML += "<input type='text' name='poolOpenWater' placeholder='Pool or Open Water'>";
+            var swimFields = "<input type='text' name='swimmingPace' placeholder='Pace'>" +
+                     "<input type='number' name='swimmingDistance' placeholder='Distance'> <br>" +
+                     "<label for='yardsMeters'>Yards or Meters:</label>" +
+                     "<select name='yardsMeters' id='yardsMeters'>" +
+                     "    <option value='Yards'>Yards</option>" +
+                     "    <option value='Meters'>Meters</option>" +
+                     "</select>" +
+                     "<label for='poolOpenWater'>Pool or Open Water:</label>" +
+                     "<select name='poolOpenWater' id='poolOpenWater'>" +
+                     "    <option value='Pool'>Pool</option>" +
+                     "    <option value='Open Water'>Open Water</option>" +
+                     "</select>";
+
+            additionalFields.innerHTML = swimFields;
             // Add other fields specific to Swimming
         } else if (workoutType === "Water_Sports") {
             additionalFields.innerHTML += "<input type='text' name='waterSportType' placeholder='Type of Water Sport'>";

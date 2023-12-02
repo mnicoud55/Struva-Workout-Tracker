@@ -3,27 +3,24 @@
 function addWorkout($data){
     global $db;
 
-    $query = "INSERT INTO Workout VALUES (((SELECT COUNT(WorkoutID)+1 FROM Workout), :duration, :notes, :date, :privacy, :userID)";
+    $query = "INSERT INTO Workout (Duration, Notes, Date, Privacy, UserID) VALUES (:duration, :notes, :date, :privacy, :userID)";
     $statement = $db->prepare($query); 
 
-    // Bind values from the $data array
+    // Bind values
     $statement->bindValue(":duration", $data['duration']);
     $statement->bindValue(":notes", $data['notes']);
     $statement->bindValue(":date", $data['date']);
     $statement->bindValue(":privacy", $data['privacy']);
-    $statement->bindValue(":userID", $data['userID']); // Assuming 'userId' is the name attribute in your form
+    $statement->bindValue(":userID", $data['userID']);
 
-    $db->beginTransaction(); // Start transaction
-    try {
-        $statement->execute();
-        $db->commit(); // Commit transaction
-    } catch (Exception $e) {
-        $db->rollBack(); // Rollback transaction on error
-        // Handle exception (e.g., log the error)
-    }
-    
+    // Execute and get the last inserted ID
+    $statement->execute();
+    $workoutID = $db->lastInsertId();
     $statement->closeCursor();
+
+    return $workoutID; // Return the newly created WorkoutID
 }
+
 
 function getWorkoutID($userID) {
     global $db;
@@ -44,19 +41,32 @@ function getWorkoutID($userID) {
 }
 
 
-function addCircuitTraining($data) {
+function addCircuitTraining($data, $workoutID) {
     // Function to add Circuit Training workout
     // ...
     global $db; 
 
 }
 
-function addCycling($data) {
+function addCycling($data, $workoutID) {
     // Function to add Cycling workout
     // ...
+    global $db;
+
+    $query = "INSERT INTO Cycling VALUES (:workoutID, :pace, :distance)";
+    $statement = $db->prepare($query); 
+
+    // Bind values from the $data array
+    $statement->bindValue(":workoutID", $workoutID);
+    $statement->bindValue(":pace", $data['pace']);
+    $statement->bindValue(":distance", $data['distance']);
+
+    $statement->execute();
+    
+    $statement->closeCursor();
 }
 
-function addFlexibilityTraining($data) {
+function addFlexibilityTraining($data, $workoutID) {
     // Function to add Flexibility Training workout
     // ...
 }
@@ -80,29 +90,82 @@ function addHiking($data, $workoutID) {
 }
 
 
-function addPlayingASport($data) {
+function addPlayingASport($data, $workoutID) {
     // Function to add Playing a Sport workout
     // ...
+    global $db;
+
+    $query = "INSERT INTO Playing_a_Sport VALUES (:workoutID, :sportName)";
+    $statement = $db->prepare($query); 
+
+    // Bind values from the $data array
+    $statement->bindValue(":workoutID", $workoutID);
+    $statement->bindValue(":sportName", $data['sportName']);
+
+    $statement->execute();
+    
+    $statement->closeCursor();
 }
 
-function addRun($data) {
+function addRun($data, $workoutID) {
     // Function to add Running workout
     // ...
+    global $db;
+
+    $query = "INSERT INTO Run VALUES (:workoutID, :runningPace, :runningDistance, :indoorOutdoor)";
+    $statement = $db->prepare($query); 
+
+    // Bind values from the $data array
+    $statement->bindValue(":workoutID", $workoutID);
+    $statement->bindValue(":runningPace", $data['runningPace']);
+    $statement->bindValue(":runningDistance", $data['runningDistance']);
+    $statement->bindValue(":indoorOutdoor", $data['indoorOutdoor']);
+
+    $statement->execute();
+    
+    $statement->closeCursor();
 }
 
-function addStrengthTraining($data) {
+function addStrengthTraining($data, $workoutID) {
     // Function to add Strength Training workout
     // ...
 }
 
-function addSwim($data) {
+function addSwim($data, $workoutID) {
     // Function to add Swimming workout
     // ...
+    global $db;
+
+    $query = "INSERT INTO Swim VALUES (:workoutID, :swimmingPace, :swimmingDistance, :yardsMeters, :poolOpenWater)";
+    $statement = $db->prepare($query); 
+
+    // Bind values from the $data array
+    $statement->bindValue(":workoutID", $workoutID);
+    $statement->bindValue(":swimmingPace", $data['swimmingPace']);
+    $statement->bindValue(":swimmingDistance", $data['swimmingDistance']);
+    $statement->bindValue(":yardsMeters", $data['yardsMeters']);
+    $statement->bindValue(":poolOpenWater", $data['poolOpenWater']);
+
+    $statement->execute();
+    
+    $statement->closeCursor();
 }
 
-function addWaterSports($data) {
+function addWaterSports($data, $workoutID) {
     // Function to add Water Sports workout
     // ...
+    global $db;
+
+    $query = "INSERT INTO Water_Sports VALUES (:workoutID, :waterSportType)";
+    $statement = $db->prepare($query); 
+
+    // Bind values from the $data array
+    $statement->bindValue(":workoutID", $workoutID);
+    $statement->bindValue(":waterSportType", $data['waterSportType']);
+
+    $statement->execute();
+    
+    $statement->closeCursor();
 }
 
 ?>
