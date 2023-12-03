@@ -2,7 +2,10 @@
 require("connect-db.php");
 require("friend-db.php");
 
-
+if (!isset($_COOKIE['user']))
+{
+  header('Location: login.php');
+}
 
 
 

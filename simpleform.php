@@ -2,6 +2,13 @@
 require("connect-db.php");
 require("workout-db.php");
 
+
+//check for if the person is logged in, can also be used in queries now so we don't have to hard code the userID
+if (!isset($_COOKIE['user']))
+{
+  header('Location: login.php');
+}
+
 $list_of_workouts = array_reverse(getAllWorkouts());
 $list_of_public_workouts = array_reverse(getPublicWorkouts());
 $user001_workouts = array_reverse(getPersonalWorkouts("U001"));
