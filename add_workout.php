@@ -13,12 +13,34 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     switch ($workoutType) {
         case 'Circuit_Training':
             addCircuitTraining($_POST, $workoutID);
+            if (isset($_POST['circuitExercises'])) {
+                for ($i = 0; $i < count($_POST['circuitExercises']); $i++) {
+                    $exerciseName = $_POST['circuitExercises'][$i];
+                    $reps = $_POST['circuitReps'][$i];
+                    $sets = $_POST['circuitSets'][$i];
+                    
+                    addCircuitExercise($_POST, $workoutID, $exerciseName, $reps, $sets);
+                    // Insert each exercise into the database
+                    // Ensure to handle and sanitize data appropriately
+                }
+            }            
             break;
         case 'Cycling':
             addCycling($_POST, $workoutID);
             break;
         case 'Flexibility_Training':
             addFlexibilityTraining($_POST, $workoutID);
+            if (isset($_POST['flexibilityExercises'])) {
+                for ($i = 0; $i < count($_POST['flexibilityExercises']); $i++) {
+                    $stretchName = $_POST['flexibilityExercises'][$i];
+                    $duration = $_POST['flexibilityDuration'][$i];
+                    $sets = $_POST['flexibilitySets'][$i];
+            
+                    addFlexibilityExercise($_POST, $workoutID, $stretchName, $duration, $sets);
+                    // Insert each exercise into the database
+                    // Ensure to handle and sanitize data appropriately
+                }
+            }            
             break;
         case 'Hiking':
             addHiking($_POST, $workoutID);
@@ -37,7 +59,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $weight = $_POST['strengthWeights'][$i];
                     $reps = $_POST['strengthReps'][$i];
                     $sets = $_POST['strengthSets'][$i];
-                    
+                    addStrengthExercise($_POST, $workoutID,$exerciseName,$weight,$reps,$sets);
                     // Insert each exercise into the database
                     // Ensure to handle and sanitize data appropriately
                 }
@@ -173,14 +195,32 @@ input[type="submit"]:hover {
 
         if (workoutType === "Circuit_Training") {
             additionalFields.innerHTML += "<input type='text' name='numCircuits' placeholder='Number of Circuits'>";
+            additionalFields.innerHTML += "<div id='circuitTrainingSection'><button type='button' id='addCircuitExercise'>Add Circuit Exercise</button></div>"
             // Add other fields specific to Circuit Training
+                document.getElementById('addCircuitExercise').addEventListener('click', function() {
+                    var container = document.getElementById('circuitTrainingSection');
+                    var exerciseDiv = document.createElement('div');
+                    exerciseDiv.innerHTML = '<input type="text" name="circuitExercises[]" placeholder="Circuit Exercise Name">' +
+                                            '<input type="number" name="circuitReps[]" placeholder="Reps">' +
+                                            '<input type="number" name="circuitSets[]" placeholder="Sets">';
+                    container.appendChild(exerciseDiv);
+                });
         } else if (workoutType === "Cycling") {
             additionalFields.innerHTML += "<input type='text' name='pace' placeholder='Pace'>";
             additionalFields.innerHTML += "<input type='int' name='distance' placeholder='Distance'>";
             // Add other fields specific to Cycling
         } else if (workoutType === "Flexibility_Training") {
             additionalFields.innerHTML += "<input type='text' name='bodyPartFocus' placeholder='Body Part Focus'>";
+            additionalFields.innerHTML += "<div id='flexibilityTrainingSection'> <button type='button' id='addFlexibilityExercise'>Add Flexibility Exercise</button></div>"
             // Add other fields specific to Flexibility Training
+            document.getElementById('addFlexibilityExercise').addEventListener('click', function() {
+                var container = document.getElementById('flexibilityTrainingSection');
+                var exerciseDiv = document.createElement('div');
+                exerciseDiv.innerHTML = '<input type="text" name="flexibilityExercises[]" placeholder="Stretch Name">' +
+                                        '<input type="number" name="flexibilityDuration[]" placeholder="Duration (seconds)">' +
+                                        '<input type="number" name="flexibilitySets[]" placeholder="Sets">';
+                container.appendChild(exerciseDiv);
+            });
         } else if (workoutType === "Hiking") {
             additionalFields.innerHTML += "<input type='text' name='trailName' placeholder='Trail Name'>";
             additionalFields.innerHTML += "<input type='int' name='hikingDistance' placeholder='Distance'>";
@@ -203,7 +243,7 @@ input[type="submit"]:hover {
             // Add other fields specific to Running
         } else if (workoutType === "Strength_Training") {
             additionalFields.innerHTML += "<input type='text' name='muscleGroup' placeholder='Muscle Group'>";
-            additionalFields.innerHTML += "<div id='strengthTrainingSection'> <button type='button' id='addStrengthExercise'>Add Strength Exercise</button> </div>"
+            additionalFields.innerHTML += "<div id='strengthTrainingSection'> <button type='button' id='addStrengthExercise'>Add Strength Exercise</button> <button type='button' id='removeStrengthExercise'>Remove Strength Exercise</button></div>"
             // Add other fields specific to Strength Training
 
         
@@ -215,6 +255,13 @@ input[type="submit"]:hover {
                                             '<input type="number" name="strengthReps[]" placeholder="Reps">' +
                                             '<input type="number" name="strengthSets[]" placeholder="Sets">';
                     container.appendChild(exerciseDiv);
+                });
+                document.getElementById('removeStrengthExercise').addEventListener('click', function() {
+                    var container = document.getElementById('strengthTrainingSection');
+                    var exercises = container.getElementsByClassName('strength-exercise');
+                    if (exercises.length > 0) {
+                        container.removeChild(exercises[exercises.length - 1]);
+                    }
                 });
             
         } else if (workoutType === "Swim") {

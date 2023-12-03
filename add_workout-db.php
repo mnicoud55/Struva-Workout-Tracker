@@ -59,6 +59,20 @@ function addCircuitTraining($data, $workoutID) {
 
 }
 
+function addCircuitExercise($data, $workoutID, $exerciseName, $reps, $sets) {
+    global $db; 
+    $query = "INSERT INTO Circuit_Exercise VALUES (:workoutID, :exerciseName, :reps, :sets)";
+    $statement = $db->prepare($query); 
+    $statement->bindValue(":workoutID", $workoutID);
+    $statement->bindValue(":exerciseName", $exerciseName);
+    $statement->bindValue(":reps", $reps);
+    $statement->bindValue(":sets", $sets);
+
+    $statement->execute();
+    
+    $statement->closeCursor();
+}
+
 function addCycling($data, $workoutID) {
     // Function to add Cycling workout
     // ...
@@ -93,6 +107,20 @@ function addFlexibilityTraining($data, $workoutID) {
     
     $statement->closeCursor();
 
+}
+
+function addFlexibilityExercise($data, $workoutID, $stretchName, $duration, $sets){
+    global $db; 
+    $query = "INSERT INTO Flexibility_Exercise VALUES (:workoutID, :stretchName, :duration, :sets)";
+    $statement = $db->prepare($query); 
+    $statement->bindValue(":workoutID", $workoutID);
+    $statement->bindValue(":stretchName", $stretchName);
+    $statement->bindValue(":duration", $duration);
+    $statement->bindValue(":sets", $sets);
+
+    $statement->execute();
+    
+    $statement->closeCursor();  
 }
 
 function addHiking($data, $workoutID) {
@@ -166,6 +194,20 @@ function addStrengthTraining($data, $workoutID) {
     
     $statement->closeCursor();
 
+}
+function addStrengthExercise($data, $workoutID, $exercise, $weight, $reps, $sets){
+    global $db; 
+    $query = "INSERT INTO Strength_Exercise VALUES (:workoutID, :exercise, :weight, :reps, :sets)";
+    $statement = $db->prepare($query); 
+    $statement->bindValue(":workoutID", $workoutID);
+    $statement->bindValue(":exercise", $exercise);
+    $statement->bindValue(":weight", $weight);
+    $statement->bindValue(":reps", $reps);
+    $statement->bindValue(":sets", $sets);
+
+    $statement->execute();
+    
+    $statement->closeCursor();
 }
 
 function addSwim($data, $workoutID) {
