@@ -96,6 +96,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     max-width: 800px;
     margin: auto;
   }
+  .add-workout-btn {
+    position: fixed; /* Stick it to a position */
+    left: 20px; /* Distance from left */
+    bottom: 20px; /* Distance from bottom */
+    padding: 10px 20px; /* Padding inside the button */
+    background-color: #007bff; /* Button color */
+    color: white; /* Text color */
+    text-decoration: none; /* Remove underline from the link */
+    border-radius: 5px; /* Rounded corners */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3); /* Shadow effect */
+    z-index: 1000; /* Make sure it's on top of other elements */
+    transition: background-color 0.3s; /* Smooth color transition */
+}
+
+.add-workout-btn:hover {
+    background-color: #0056b3; /* Change color on hover */
+}
+
     </style>
 </head>
 
@@ -276,6 +294,8 @@ $currentFilter = $_SERVER["REQUEST_METHOD"] == "POST" ? $_POST['privacyFilter'] 
       </div>
     <?php endforeach; ?>
   </div>
+  <!-- Add Workout Button -->
+<a href="add_workout.php" class="add-workout-btn">Add Workout+</a>
 </div>
 
 
@@ -287,6 +307,8 @@ $currentFilter = $_SERVER["REQUEST_METHOD"] == "POST" ? $_POST['privacyFilter'] 
   <!-- <script src="your-js-file.js"></script> -->  
   
 </div> 
+<a href="add_workout.php" class="add-workout-btn">Add Workout+</a>
+
 
 <?php include("footer.html"); ?>
 </body>
