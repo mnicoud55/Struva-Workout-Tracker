@@ -16,10 +16,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if (isset($_POST['circuitExercises'])) {
                 for ($i = 0; $i < count($_POST['circuitExercises']); $i++) {
                     $exerciseName = $_POST['circuitExercises'][$i];
-                    $reps = $_POST['circuitReps'][$i];
+                    $amount = $_POST['circuitAmount'][$i];
+                    $repsOrSeconds = $_POST['repsSeconds'][$i];
                     $sets = $_POST['circuitSets'][$i];
                     
-                    addCircuitExercise($_POST, $workoutID, $exerciseName, $reps, $sets);
+                    addCircuitExercise($_POST, $workoutID, $exerciseName, $amount, $repsOrSeconds, $sets);
                     // Insert each exercise into the database
                     // Ensure to handle and sanitize data appropriately
                 }
@@ -195,32 +196,61 @@ input[type="submit"]:hover {
 
         if (workoutType === "Circuit_Training") {
             additionalFields.innerHTML += "<input type='text' name='numCircuits' placeholder='Number of Circuits'>";
-            additionalFields.innerHTML += "<div id='circuitTrainingSection'><button type='button' id='addCircuitExercise'>Add Circuit Exercise</button></div>"
+            additionalFields.innerHTML += "<div id='circuitTrainingSection'><button type='button' id='addCircuitExercise'>Add Circuit Exercise</button><button type='button' id='removeCircuitExercise'>Remove Circuit Exercise</button><div id='circuitExercisesContainer'></div></div>"
             // Add other fields specific to Circuit Training
-                document.getElementById('addCircuitExercise').addEventListener('click', function() {
-                    var container = document.getElementById('circuitTrainingSection');
-                    var exerciseDiv = document.createElement('div');
-                    exerciseDiv.innerHTML = '<input type="text" name="circuitExercises[]" placeholder="Circuit Exercise Name">' +
-                                            '<input type="number" name="circuitReps[]" placeholder="Reps">' +
-                                            '<input type="number" name="circuitSets[]" placeholder="Sets">';
-                    container.appendChild(exerciseDiv);
-                });
+                // Existing code for adding exercises
+            document.getElementById('addCircuitExercise').addEventListener('click', function() {
+                var container = document.getElementById('circuitExercisesContainer'); // Change to circuitExercisesContainer
+                var exerciseDiv = document.createElement('div');
+                exerciseDiv.className = 'circuit-exercise'; // Add this line to assign a class
+                exerciseDiv.innerHTML = '<input type="text" name="circuitExercises[]" placeholder="Circuit Exercise Name">' +
+                                        '<input type="number" name="circuitAmount[]" placeholder="Amount"><br>' +
+                                        '<label for="repsSeconds[]">Reps or Seconds:</label>' +
+                                        '<select name="repsSeconds[]" id="repsSeconds">' +
+                                        '    <option value="Reps">Reps</option>' +
+                                        '    <option value="Seconds">Seconds</option>' +
+                                        '</select>' +
+                                        '<input type="number" name="circuitSets[]" placeholder="Sets">';
+                container.appendChild(exerciseDiv);
+            });
+
+            // Existing code for removing exercises
+            document.getElementById('removeCircuitExercise').addEventListener('click', function() {
+                var container = document.getElementById('circuitExercisesContainer');
+                var exercises = container.getElementsByClassName('circuit-exercise');
+                if (exercises.length > 0) {
+                    container.removeChild(exercises[exercises.length - 1]);
+                }
+            });
+
         } else if (workoutType === "Cycling") {
             additionalFields.innerHTML += "<input type='text' name='pace' placeholder='Pace'>";
             additionalFields.innerHTML += "<input type='int' name='distance' placeholder='Distance'>";
             // Add other fields specific to Cycling
         } else if (workoutType === "Flexibility_Training") {
             additionalFields.innerHTML += "<input type='text' name='bodyPartFocus' placeholder='Body Part Focus'>";
-            additionalFields.innerHTML += "<div id='flexibilityTrainingSection'> <button type='button' id='addFlexibilityExercise'>Add Flexibility Exercise</button></div>"
+            additionalFields.innerHTML += "<div id='flexibilityTrainingSection'> <button type='button' id='addFlexibilityExercise'>Add Stretch</button><button type='button' id='removeFlexibilityExercise'>Remove Stretch</button><div id='flexibilityExercisesContainer'></div></div>"
             // Add other fields specific to Flexibility Training
+            // Code for adding flexibility exercises
             document.getElementById('addFlexibilityExercise').addEventListener('click', function() {
-                var container = document.getElementById('flexibilityTrainingSection');
+                var container = document.getElementById('flexibilityExercisesContainer'); // Corrected container ID
                 var exerciseDiv = document.createElement('div');
+                exerciseDiv.className = 'flexibility-exercise'; // Assign a class to each exercise div
                 exerciseDiv.innerHTML = '<input type="text" name="flexibilityExercises[]" placeholder="Stretch Name">' +
                                         '<input type="number" name="flexibilityDuration[]" placeholder="Duration (seconds)">' +
                                         '<input type="number" name="flexibilitySets[]" placeholder="Sets">';
                 container.appendChild(exerciseDiv);
             });
+
+            // Code for removing flexibility exercises
+            document.getElementById('removeFlexibilityExercise').addEventListener('click', function() {
+                var container = document.getElementById('flexibilityExercisesContainer'); // Ensure this matches the container ID used in the add code
+                var exercises = container.getElementsByClassName('flexibility-exercise');
+                if (exercises.length > 0) {
+                    container.removeChild(exercises[exercises.length - 1]);
+                }
+            });
+
         } else if (workoutType === "Hiking") {
             additionalFields.innerHTML += "<input type='text' name='trailName' placeholder='Trail Name'>";
             additionalFields.innerHTML += "<input type='int' name='hikingDistance' placeholder='Distance'>";
@@ -243,26 +273,25 @@ input[type="submit"]:hover {
             // Add other fields specific to Running
         } else if (workoutType === "Strength_Training") {
             additionalFields.innerHTML += "<input type='text' name='muscleGroup' placeholder='Muscle Group'>";
-            additionalFields.innerHTML += "<div id='strengthTrainingSection'> <button type='button' id='addStrengthExercise'>Add Strength Exercise</button> <button type='button' id='removeStrengthExercise'>Remove Strength Exercise</button></div>"
-            // Add other fields specific to Strength Training
+            additionalFields.innerHTML += "<div id='strengthTrainingSection'> <button type='button' id='addStrengthExercise'>Add Strength Exercise</button><button type='button' id='removeStrengthExercise'>Remove Strength Exercise</button><div id='strengthExercisesContainer'></div> </div>"
+            document.getElementById('addStrengthExercise').addEventListener('click', function() {
+                var container = document.getElementById('strengthExercisesContainer');
+                var exerciseDiv = document.createElement('div');
+                exerciseDiv.className = 'strength-exercise'; // Assign the class
+                exerciseDiv.innerHTML = '<input type="text" name="strengthExercises[]" placeholder="Exercise Name">' +
+                                        '<input type="number" name="strengthWeights[]" placeholder="Weight">' +
+                                        '<input type="number" name="strengthReps[]" placeholder="Reps">' +
+                                        '<input type="number" name="strengthSets[]" placeholder="Sets">';
+                container.appendChild(exerciseDiv);
+            });
 
-        
-                document.getElementById('addStrengthExercise').addEventListener('click', function() {
-                    var container = document.getElementById('strengthTrainingSection');
-                    var exerciseDiv = document.createElement('div');
-                    exerciseDiv.innerHTML = '<input type="text" name="strengthExercises[]" placeholder="Exercise Name">' +
-                                            '<input type="number" name="strengthWeights[]" placeholder="Weight">' +
-                                            '<input type="number" name="strengthReps[]" placeholder="Reps">' +
-                                            '<input type="number" name="strengthSets[]" placeholder="Sets">';
-                    container.appendChild(exerciseDiv);
-                });
-                document.getElementById('removeStrengthExercise').addEventListener('click', function() {
-                    var container = document.getElementById('strengthTrainingSection');
-                    var exercises = container.getElementsByClassName('strength-exercise');
-                    if (exercises.length > 0) {
-                        container.removeChild(exercises[exercises.length - 1]);
-                    }
-                });
+            document.getElementById('removeStrengthExercise').addEventListener('click', function() {
+                var container = document.getElementById('strengthExercisesContainer');
+                var exercises = container.getElementsByClassName('strength-exercise');
+                if (exercises.length > 0) {
+                    container.removeChild(exercises[exercises.length - 1]);
+                }
+            });
             
         } else if (workoutType === "Swim") {
             var swimFields = "<input type='text' name='swimmingPace' placeholder='Pace'>" +
@@ -285,6 +314,7 @@ input[type="submit"]:hover {
             // Add other fields specific to Water Sports
         }
     }
+
 </script>
 
 

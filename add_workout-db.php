@@ -59,13 +59,14 @@ function addCircuitTraining($data, $workoutID) {
 
 }
 
-function addCircuitExercise($data, $workoutID, $exerciseName, $reps, $sets) {
+function addCircuitExercise($data, $workoutID, $exerciseName, $amount, $repsOrSeconds, $sets) {
     global $db; 
-    $query = "INSERT INTO Circuit_Exercise VALUES (:workoutID, :exerciseName, :reps, :sets)";
+    $query = "INSERT INTO Circuit_Exercise VALUES (:workoutID, :exerciseName, :amount, :repsOrSeconds,:sets)";
     $statement = $db->prepare($query); 
     $statement->bindValue(":workoutID", $workoutID);
     $statement->bindValue(":exerciseName", $exerciseName);
-    $statement->bindValue(":reps", $reps);
+    $statement->bindValue(":amount", $amount);
+    $statement->bindValue(":repsOrSeconds", $repsOrSeconds);
     $statement->bindValue(":sets", $sets);
 
     $statement->execute();
@@ -111,7 +112,7 @@ function addFlexibilityTraining($data, $workoutID) {
 
 function addFlexibilityExercise($data, $workoutID, $stretchName, $duration, $sets){
     global $db; 
-    $query = "INSERT INTO Flexibility_Exercise VALUES (:workoutID, :stretchName, :duration, :sets)";
+    $query = "INSERT INTO Flexibility_Stretch VALUES (:workoutID, :stretchName, :duration, :sets)";
     $statement = $db->prepare($query); 
     $statement->bindValue(":workoutID", $workoutID);
     $statement->bindValue(":stretchName", $stretchName);
