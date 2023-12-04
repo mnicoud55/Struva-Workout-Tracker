@@ -12,9 +12,7 @@ function LoadFriendRequests($userID){
 }
 function AcceptFriendRequest($userID1, $userID2){
     global $db;
-    $query = "DELETE FROM Friend_Request WHERE received_request_id = :userID1 AND sent_request_id = :userID2;
-    INSERT INTO Friends VALUES (:userID1, :userID2);
-    INSERT INTO Friends VALUES (:userID2, :userID1);";
+    $query = "CALL acceptFriendRequest(:userID1, :userID2)";
     $statement = $db->prepare($query); 
     $statement->bindValue(":userID1", $userID1);
     $statement->bindValue(":userID2", $userID2);
@@ -57,9 +55,7 @@ function SearchUsers($searchTerm){
 
 function SendFriendRequest($userID1, $userID2){
     global $db;
-    $query = "INSERT INTO Friend_Request (sent_request_id, received_request_id)
-    VALUES (:userID1, :userID2)
-    ON DUPLICATE KEY UPDATE sent_request_id = sent_request_id;";
+    $query = "CALL sendFriendRequest(:userID1, :userID2)";
     $statement = $db->prepare($query); 
     $statement->bindValue(":userID1", $userID1);
     $statement->bindValue(":userID2", $userID2);
