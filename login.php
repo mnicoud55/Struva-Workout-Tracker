@@ -63,35 +63,25 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && strlen($_POST['username']) > 0)
    if (!ctype_alnum($user))   // ctype_alnum() check if the values contain only alphanumeric data
       reject('User Name');
    if(!doesUserExist($user)) reject('Username does not exist');
-   echo doesUserExist($user) . "<br/>";
    
    $hash = getPassword($user);
-   echo $hash[0] . "<br/>";
 		
    // If pwd is entered and contains only alphanumeric data, set cookies and redirect the user to survey instruction page;
    // otherwise, reject the password and force re-login.
    if (isset($_POST['pwd']))
    {
-      echo 1;
-      echo $_POST['pwd'];
       $pwd = htmlspecialchars($_POST['pwd']);   
-      echo 2;
-      echo $pwd;
       if (!ctype_alnum($pwd))
          reject('Invalid Password');
       else if (password_verify($pwd, $hash[0]))
       {
-         echo 3;
          // setcookie() function stores the submitted fields' name/value pair
          setcookie('user', $user, time()+3600);
-         echo 4;
          
          setcookie('pwd', $hash[0], time()+3600);    // password_hash() requires at least PHP5.5 
 					
-         echo 5;
          // Redirect the browser to another page using the header() function to specify the target URL
          header('Location: simpleform.php');
-         echo 6;
       } else {
          echo "incorrect password, please try again";
       }

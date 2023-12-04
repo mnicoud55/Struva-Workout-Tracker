@@ -179,7 +179,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo 'invalid date format';
         }
 
-    if(!$valid_dob){
+    if($valid_dob){
         // Create SQL UPDATE query
         $query = "UPDATE Users SET Name = :name, Height_ft = :height_ft, Height_in = :height_in, 
                 Weight = :weight, DOB = :dob, Gender = :gender WHERE UserID = :userID";
