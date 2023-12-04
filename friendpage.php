@@ -12,11 +12,11 @@ if (!isset($_COOKIE['user']))
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['accept'])) {
         $requestID = $_POST['request_id'];
-        AcceptFriendRequest("U001", $requestID);
+        AcceptFriendRequest($_COOKIE['user'], $requestID);
         // Redirect or show a success message for acceptance
     } elseif (isset($_POST['decline'])) {
         $requestID = $_POST['request_id'];
-        DeclineFriendRequest("U001", $requestID);
+        DeclineFriendRequest($_COOKIE['user'], $requestID);
         // Redirect or show a success message for declining
     }
 }
@@ -27,16 +27,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $searchResults = SearchUsers($searchTerm); // Function to search users based on input
     } elseif (isset($_POST['send_request'])) {
         $targetUserID = $_POST['target_user_id'];
-        SendFriendRequest("U001", $targetUserID); // Assuming "U001" is the ID of the current user
+        SendFriendRequest($_COOKIE['user'], $targetUserID); // Assuming "U001" is the ID of the current user
         // Optionally, handle redirection or success message here
     }
 }
-$sentRequests = PendingSentFriendRequests("U001");
+$sentRequests = PendingSentFriendRequests($_COOKIE['user']);
 
 
 
-$list_of_U001_requests = LoadFriendRequests("U001");
-$list_of_U001_friends = LoadFriends("U001");
+$list_of_U001_requests = LoadFriendRequests($_COOKIE['user']);
+$list_of_U001_friends = LoadFriends($_COOKIE['user']);
 ?>
 <!DOCTYPE html>
 <html>
@@ -121,7 +121,7 @@ th, td {
     </thead>
     <tbody>
     <?php 
-            $list_of_U001_requests = LoadFriendRequests("U001");
+            $list_of_U001_requests = LoadFriendRequests($_COOKIE['user']);
             foreach ($list_of_U001_requests as $friendRequest) {
                 echo '<tr>';
                 echo '<td>' . htmlspecialchars($friendRequest['sent_request_id']) . '</td>';
@@ -172,7 +172,7 @@ th, td {
     </thead>
     <tbody>
     <?php 
-        $list_of_U001_friends = LoadFriends("U001");
+        $list_of_U001_friends = LoadFriends($_COOKIE['user']);
         foreach ($list_of_U001_friends as $friend) {
             echo '<tr>';
             // Access specific elements of the $friend array

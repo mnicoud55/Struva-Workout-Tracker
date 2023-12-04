@@ -11,13 +11,13 @@ if (!isset($_COOKIE['user']))
 
 $list_of_workouts = array_reverse(getAllWorkouts());
 $list_of_public_workouts = array_reverse(getPublicWorkouts());
-$user001_workouts = array_reverse(getPersonalWorkouts("U001"));
-$user001_friends = array_reverse(getFriendWorkouts("U001"));
+$user001_workouts = array_reverse(getPersonalWorkouts($_COOKIE['user']));
+$user001_friends = array_reverse(getFriendWorkouts($_COOKIE['user']));
 $results = array_reverse(getPublicWorkouts());
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $filter = $_POST['privacyFilter'];
-  $userID = "U001"; // Assuming a user ID, replace with actual user ID
+  $userID = $_COOKIE['user']; // Assuming a user ID, replace with actual user ID
 
   switch ($filter) {
       case 'public':

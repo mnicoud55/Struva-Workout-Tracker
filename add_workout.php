@@ -4,7 +4,14 @@ require("add_workout-db.php");
 //Workout table needs to be modified with this:
 //ALTER TABLE Workout MODIFY COLUMN WorkoutID int NOT NULL AUTO_INCREMENT PRIMARY KEY; 
 
+if (!isset($_COOKIE['user']))
+{
+  header('Location: login.php');
+}
+
+$to_echo = "";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $to_echo = "Workout Added";
     $workoutType = $_POST['workoutType'];
     // Process general Workout fields
     // ...
@@ -150,7 +157,7 @@ input[type="submit"]:hover {
 </head>
 <body>
 <?php include("header.html"); ?> 
-
+    <?php echo $to_echo;?>
 
     <!-- Content goes here -->
     <form action="add_workout.php" method="post" id="workoutForm">
@@ -180,7 +187,7 @@ input[type="submit"]:hover {
         <option value="Private">Personal</option>
     </select>
         <!-- Need to make this a hidden input <input type="text" name="userId" placeholder="User ID"> --> 
-        <input type="hidden" name="userID" value="U001">
+        <input type="hidden" name="userID" value="<?php echo isset($_COOKIE['user']) ? $_COOKIE['user'] : ''; ?>">
         <!-- Dynamic version <input type="hidden" name="userId" value="<?php echo htmlspecialchars($userId); ?>"> -->
 
         <!-- Additional fields will be displayed here -->
