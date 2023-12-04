@@ -44,6 +44,20 @@ function createAccount($userID, $hashed_pwd, $name, $height_ft, $height_in, $wei
         $statement->execute();
         $statement->closeCursor();
 
+        try {
+            $privilegeQuery = "
+                GRANT SELECT, INSERT, UPDATE, DELETE ON goh8zpr_d.* TO ':userID'@'%'; 
+                REVOKE INSERT ON goh8zpr_d.Users TO ':userID'@'%';
+                REVOKE INSERT ON goh8zpr_d.UsersDOB TO ':userID'@'%';
+            ";
+            $privilegeStatement = $db->prepare($privilegeQuery);
+            $privilegeStatement->bindValue(":userID", $userID);
+            $privilegeStatement->execute();
+            $privilegeStatement->closeCursor();
+        } catch (PDOException $e) {
+            echo "Error granting privileges: " . $e->getMessage();
+        }
+
         // Return true if the execution was successful
         return true;
     } catch (PDOException $e) {
