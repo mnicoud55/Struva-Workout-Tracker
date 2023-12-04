@@ -42,12 +42,20 @@
 ////////////////////////////////////////////
 
 /** F23, PHP (on GCP, local XAMPP, or CS server) connect to MySQL (on CS server) **/
- $username = 'goh8zpr'; 
- $password = '!JwUFB!72S1fXzEb';
+ $username = 'jmb4zz'; 
+ $password = '/!.O7xMsAtRKnmtu';
  $host = 'mysql01.cs.virginia.edu';
  $dbname = 'goh8zpr_d';
  $dsn = "mysql:host=$host;dbname=$dbname";
 // ////////////////////////////////////////////
+
+// /** F23, PHP (on GCP, local XAMPP, or CS server) connect to MySQL (on CS server) **/
+// $username = 'goh8zpr'; 
+// $password = '!JwUFB!72S1fXzEb';
+// $host = 'mysql01.cs.virginia.edu';
+// $dbname = 'goh8zpr_d';
+// $dsn = "mysql:host=$host;dbname=$dbname";
+// // ////////////////////////////////////////////
 
 
 
