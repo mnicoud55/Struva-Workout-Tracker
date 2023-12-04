@@ -49,13 +49,7 @@
  $dsn = "mysql:host=$host;dbname=$dbname";
 // ////////////////////////////////////////////
 
-// /** F23, PHP (on GCP, local XAMPP, or CS server) connect to MySQL (on CS server) **/
-// $username = 'jmb4zz'; 
-// $password = 'BradyFamily5';
-// $host = 'mysql01.cs.virginia.edu';
-// $dbname = 'jmb4zz_c';
-// $dsn = "mysql:host=$host;dbname=$dbname";
-// // ////////////////////////////////////////////
+
 
 
 
