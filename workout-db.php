@@ -1,5 +1,16 @@
 <?php
 
+function getNameFromID($userID)
+{
+    global $db;
+    $query = "SELECT Name FROM Users WHERE UserID = :userID";
+    $statement = $db->prepare($query);
+    $statement->bindValue(":userID", $userID);
+    $statement->execute();
+    $results = $statement->fetch();
+    $statement->closeCursor();
+    return $results[0];
+}
 
 function getAllWorkouts()
 {

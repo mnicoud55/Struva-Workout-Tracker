@@ -148,6 +148,7 @@ $currentFilter = $_SERVER["REQUEST_METHOD"] == "POST" ? $_POST['privacyFilter'] 
     <?php foreach ($results as $workout): ?>
       <div class="workout-card">
         <div class="card-header">
+          <h3><?php echo getNameFromID($workout['UserID'])?><h3>
           <h4><?php echo $workout['UserID']; ?></h4>
         </div>
         <div class="card-body">

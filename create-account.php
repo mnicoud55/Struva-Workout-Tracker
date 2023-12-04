@@ -149,10 +149,10 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && strlen($_POST['username']) > 0)
     //Check if birthday is set and person is at least 18
     if(isset($_POST['birthday']))
     {
-        $birthday = $_POST['birthday'];
+        $dob = $_POST['birthday'];
         //checking that the date is formatted correctly
-        if (DateTime::createFromFormat('Y-m-d', $birthday) !== false) {
-            $birthdate = new DateTime($birthday);
+        if (DateTime::createFromFormat('Y-m-d', $dob) !== false) {
+            $birthdate = new DateTime($dob);
             $currentDate = new DateTime();
             
             // Calculate the difference in years
@@ -176,7 +176,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && strlen($_POST['username']) > 0)
 
     if(!$account_error){
         //TODO fill in this function to create an account
-        if(!createAccount($user, $hashed_pwd, $name, $height_ft, $height_in, $weight, $birthday, $gender))
+        if(!createAccount($user, $hashed_pwd, $name, $height_ft, $height_in, $weight, $dob, $gender))
         {
             echo "error in creating account";
         } else {

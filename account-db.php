@@ -8,6 +8,7 @@ function doesUserExist($userID){
         $statement->bindValue(":userID", $userID);
         $statement->execute();
         $results=$statement->fetchAll();
+        $statement->closeCursor();
         if(count($results) > 0) return true;
         else return false;
     } catch (PDOException $e) {
@@ -41,6 +42,7 @@ function createAccount($userID, $hashed_pwd, $name, $height_ft, $height_in, $wei
         $statement->bindValue(":password", $hashed_pwd);
         $statement->bindValue(":gender", $gender);
         $statement->execute();
+        $statement->closeCursor();
 
         // Return true if the execution was successful
         return true;
@@ -59,6 +61,7 @@ function getPassword($user)
     $statement->bindValue(":userID", $user);
     $statement->execute();
     $results = $statement->fetch(); //using fetch because there will only be one result
+    $statement->closeCursor();
     return $results;
 }
 ?>

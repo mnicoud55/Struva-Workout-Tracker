@@ -159,22 +159,44 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $dob = htmlspecialchars($_POST['dob']);
     $gender = htmlspecialchars($_POST['gender']);
 
-    // Create SQL UPDATE query
-    $query = "UPDATE Users SET Name = :name, Height_ft = :height_ft, Height_in = :height_in, 
-              Weight = :weight, DOB = :dob, Gender = :gender WHERE UserID = :userID";
 
-    // Prepare and bind parameters
-    $statement = $db->prepare($query);
-    $statement->bindValue(':name', $name);
-    $statement->bindValue(':height_ft', $height_ft);
-    $statement->bindValue(':height_in', $height_in);
-    $statement->bindValue(':weight', $weight);
-    $statement->bindValue(':dob', $dob);
-    $statement->bindValue(':gender', $gender);
-    $statement->bindValue(':userID', $_COOKIE['user']);  
+    //checking that the date is formatted correctly
+    $valid_dob=false;
+    if (DateTime::createFromFormat('Y-m-d', $dob) !== false) {
+        $birthdate = new DateTime($dob);
+        $currentDate = new DateTime();
+            
+        // Calculate the difference in years
+        $age = $currentDate->diff($birthdate)->y;
+        
+        // Check if the person is over 18
+        if ($age >= 18) {
+            $valid_dob = true;
+        } else {
+            echo 'must be over 18 to have an account';
+        }
+        } else {
+            echo 'invalid date format';
+        }
 
-    // Execute the query
-    $statement->execute();
+    if(!$valid_dob){
+        // Create SQL UPDATE query
+        $query = "UPDATE Users SET Name = :name, Height_ft = :height_ft, Height_in = :height_in, 
+                Weight = :weight, DOB = :dob, Gender = :gender WHERE UserID = :userID";
+
+        // Prepare and bind parameters
+        $statement = $db->prepare($query);
+        $statement->bindValue(':name', $name);
+        $statement->bindValue(':height_ft', $height_ft);
+        $statement->bindValue(':height_in', $height_in);
+        $statement->bindValue(':weight', $weight);
+        $statement->bindValue(':dob', $dob);
+        $statement->bindValue(':gender', $gender);
+        $statement->bindValue(':userID', $_COOKIE['user']);  
+
+        // Execute the query
+        $statement->execute();
+    }
     } elseif (isset($_POST['form_type']) && $_POST['form_type'] == 'delete_workout') {
         // Code to handle workout deletion
         $workoutId = $_POST['workout_id'];
@@ -186,6 +208,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $statement->execute();
         
     }
+
 }
 
 $userData = getUserInfo($_COOKIE['user']);
@@ -223,7 +246,7 @@ Name: <input type="text" name="name" value="<?php echo isset($userData['Name']) 
         </div>
         <br>
     <?php endforeach; ?>
-  </div>
+  </div> 
 </div>
 
 
