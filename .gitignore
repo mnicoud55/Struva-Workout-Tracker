@@ -1,0 +1,6 @@
+.vscode/
+.cursor/
+.env
+*.sql
+ca.pem
+old_connect-db.php

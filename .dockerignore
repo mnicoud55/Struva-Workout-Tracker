@@ -1,0 +1,13 @@
+# Ignore Git
+.git
+.gitignore
+
+# Ignore OS files
+.DS_Store
+
+# Ignore dependencies (if using Composer locally later)
+vendor/
+node_modules/
+
+# Ignore logs
+*.log
