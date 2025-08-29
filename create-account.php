@@ -112,7 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && strlen($_POST['username']) > 0)
             $account_error = true;
             reject('Invalid password, must only contain alphanumeric symbols');
         }
-        $hashed_pwd = password_hash($pwd, PASSWORD_DEFAULT);
+        $hashed_pwd = password_hash($pwd, PASSWORD_ARGON2ID);
     }
 
     // Check if name is set and valid
@@ -185,7 +185,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && strlen($_POST['username']) > 0)
             setcookie('pwd', $hashed_pwd, time()+3600);
 
             // Redirect the browser to the main page
-            header('Location: simpleform.php');
+            header('Location: mainpage.php');
         }
 
     }

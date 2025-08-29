@@ -1,10 +1,11 @@
 <?php 
 require 'connect-db.php';
 require 'account-db.php';
+ob_start();
 
 if (isset($_COOKIE['user']))
 {
-  header('Location: simpleform.php');
+  header('Location: mainpage.php');
 }
 
 ?>
@@ -60,33 +61,56 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && strlen($_POST['username']) > 0)
    // If username contains only alphanumeric data, proceed to verify the password;
    // otherwise, reject the username and force re-login.
    $user = trim($_POST['username']);
-   if (!ctype_alnum($user))   // ctype_alnum() check if the values contain only alphanumeric data
-      reject('User Name');
-   if(!doesUserExist($user)) reject('Username does not exist');
-   
+   if (!ctype_alnum($user))   { // ctype_alnum() check if the values contain only alphanumeric data
+      reject('Username must be alphanumeric');
+      exit;
+   }
+   if(!doesUserExist($user)) {
+      reject('Username does not exist');
+      exit;
+   }
+
    $hash = getPassword($user);
-		
+
    // If pwd is entered and contains only alphanumeric data, set cookies and redirect the user to survey instruction page;
    // otherwise, reject the password and force re-login.
    if (isset($_POST['pwd']))
    {
       $pwd = htmlspecialchars($_POST['pwd']);   
-      if (!ctype_alnum($pwd))
+      if (!ctype_alnum($pwd)) {
          reject('Invalid Password');
-      else if (password_verify($pwd, $hash[0]))
-      {
-         // setcookie() function stores the submitted fields' name/value pair
+      }
+      else if (password_verify($pwd, $hash[0])) {
+         // Normal path: password verified against hash
          setcookie('user', $user, time()+3600);
-         
-         setcookie('pwd', $hash[0], time()+3600);    // password_hash() requires at least PHP5.5 
-					
-         // Redirect the browser to another page using the header() function to specify the target URL
-         header('Location: simpleform.php');
-      } else {
+         setcookie('pwd', $hash[0], time()+3600);         
+         header('Location: mainpage.php');
+      } 
+      else if (strlen($hash[0]) < 60 && $pwd === $hash[0]) {
+         // Fallback: plaintext match, upgrade to hashed password
+         $newHash = password_hash($pwd, PASSWORD_ARGON2ID);
+
+         // Update DB with new hash
+         global $db;
+         $stmt = $db->prepare("UPDATE Users SET password = :newHash WHERE UserID = :user");
+         $stmt->execute([
+            ':newHash' => $newHash,
+            ':user'    => $user
+         ]);
+
+         // updatePassword($user, $newHash);
+
+         // Continue login flow
+         setcookie('user', $user, time()+3600);
+         setcookie('pwd', $newHash, time()+3600);
+         header('Location: mainpage.php');
+      }
+      else {
          echo "incorrect password, please try again";
       }
    }
 }
+ob_end_flush();
 ?>
 
 

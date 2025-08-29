@@ -64,4 +64,14 @@ function getPassword($user)
     $statement->closeCursor();
     return $results;
 }
+
+function updatePassword($user, $newHash) {
+    global $db;
+    $query = 'UPDATE Users SET password = :newHash WHERE UserID = :userID';
+    $statement = $db->prepare($query);
+    $statement->bindValue(":newHash", $newHash);
+    $result = $statement->execute();
+    $statement->closeCursor();
+    return $result;
+}
 ?>

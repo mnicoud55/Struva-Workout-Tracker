@@ -1,6 +1,7 @@
 <?php
 require("connect-db.php");
 require("workout-db.php");
+ob_start();
 
 
 //check for if the person is logged in, can also be used in queries now so we don't have to hard code the userID
@@ -47,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="author" content="your name">
   <meta name="description" content="include some description about your page">  
-  <title>Get started with DB programming</title>
+  <title>Struva</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">  
   <!-- <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"> -->
   <link rel="stylesheet" href="dashboard.css">
@@ -119,7 +120,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <body>
 <?php include("header.html"); ?>  
-<!-- <form action="simpleform.php" method="post">
+<!-- <form action="mainpage.php" method="post">
         <label for="privacyFilter">Choose a filter:</label>
         <select name="privacyFilter" id="privacyFilter">
             <option value="public">Public</option>
@@ -132,7 +133,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 $currentFilter = $_SERVER["REQUEST_METHOD"] == "POST" ? $_POST['privacyFilter'] : 'public';
 ?>
 <!-- Form for the buttons to select the filters -->
-<form action="simpleform.php" method="post">
+<form action="mainpage.php" method="post">
 <div class="btn-group" role="group" aria-label="Filter Buttons">
     <button type="submit" name="privacyFilter" value="public" class="btn btn-outline-info btn-lg <?php echo $currentFilter == 'public' ? 'active' : ''; ?>">Public</button>
     <button type="submit" name="privacyFilter" value="friends" class="btn btn-outline-info btn-lg <?php echo $currentFilter == 'friends' ? 'active' : ''; ?>">Friends</button>
@@ -311,6 +312,9 @@ $currentFilter = $_SERVER["REQUEST_METHOD"] == "POST" ? $_POST['privacyFilter'] 
 <a href="add_workout.php" class="add-workout-btn">Add Workout+</a>
 
 
-<?php include("footer.html"); ?>
+<?php 
+include("footer.html"); 
+ob_end_flush();
+?>
 </body>
 </html>

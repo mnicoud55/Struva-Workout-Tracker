@@ -1,3 +1,6 @@
+<?php
+ob_start();
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -34,6 +37,7 @@ if (count($_COOKIE) > 0)
    // redirect with 5 seconds delay
    header('refresh:5; url=login.php');
 }
+ob_end_flush();
 ?>
 
 

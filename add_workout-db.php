@@ -3,6 +3,24 @@
 function addWorkout($data){
     global $db;
 
+    // __________________________________
+    // Running auto-increment code here temporarily
+    $stmt = $db->query("SELECT MAX(WorkoutID) AS maxID FROM Workout");
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    $nextWorkoutID = ($row['maxID'] !== null) ? $row['maxID'] + 1 : 1;  // start at 1 if table empty
+    $query = "INSERT INTO Workout (WorkoutID, Duration, Notes, Date, Privacy, UserID) VALUES (:workoutID, :duration, :notes, :date, :privacy, :userID)";
+    $statement = $db->prepare($query); 
+
+    // Bind values
+    $statement->bindValue(":workoutID", $nextWorkoutID);
+    $statement->bindValue(":duration", $data['duration']);
+    $statement->bindValue(":notes", $data['notes']);
+    $statement->bindValue(":date", $data['date']);
+    $statement->bindValue(":privacy", $data['privacy']);
+    $statement->bindValue(":userID", $data['userID']);
+    // ________________________________________________
+    
+    /*
     $query = "INSERT INTO Workout (Duration, Notes, Date, Privacy, UserID) VALUES (:duration, :notes, :date, :privacy, :userID)";
     $statement = $db->prepare($query); 
 
@@ -12,13 +30,13 @@ function addWorkout($data){
     $statement->bindValue(":date", $data['date']);
     $statement->bindValue(":privacy", $data['privacy']);
     $statement->bindValue(":userID", $data['userID']);
-
+*/
     // Execute and get the last inserted ID
     $statement->execute();
     $workoutID = $db->lastInsertId();
     $statement->closeCursor();
 
-    return $workoutID; // Return the newly created WorkoutID
+    return $nextWorkoutID; // Return the newly created WorkoutID
 }
 
 

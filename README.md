@@ -11,5 +11,5 @@ docker compose up --build
 
 2. To examine the database, set environment variables and then run: 
 ```bash
-mysql --host=$DB_HOST --port=$DB_PORT --user=$DB_USER --password=$DB_PASS --ssl-ca=$DB_CA $DB_DB
+mysql --host=$DB_HOST --port=$DB_PORT --user=$DB_USER --password=$DB_PASS --ssl-ca=$DB_CA $DB_NAME
 ```
