@@ -5,7 +5,7 @@ $port = getenv('DB_PORT');
 $dbname = getenv('DB_NAME');
 $user = getenv('DB_USER');
 $password = getenv('DB_PASS');
-$ssl_ca = __DIR__ . '/ca.pem';
+$ssl_ca = getenv('SSL_CA');
 
 try {
     $db = new PDO(
