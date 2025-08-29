@@ -98,7 +98,6 @@ $currentFilter = $_SERVER["REQUEST_METHOD"] == "POST" ? $_POST['privacyFilter'] 
             $res = "";
 
             //checking for each specific workout 
-            //Please note this will be the most ungodly code known to man but it should work
             $Circuit_Training = getCircuitTraining($workout['WorkoutID']);
             $Cycling = getCycling($workout['WorkoutID']);
             $Flexibility_Training = getFlexibilityTraining($workout['WorkoutID']);
@@ -110,38 +109,69 @@ $currentFilter = $_SERVER["REQUEST_METHOD"] == "POST" ? $_POST['privacyFilter'] 
             $Water_Sports = getWaterSports($workout['WorkoutID']);
 
 
-            if (count($Circuit_Training) > 0) {
-              //add actual output later
-              $res .= "<u>Circuit Training</u> <br>\n";
+            $hasCircuit = count($Circuit_Training) > 0;
+            $hasFlex = count($Flexibility_Training) > 0;
+            $hasStrength = count($Strength_Training) > 0;
+
+            if ($hasCircuit) {
+              // section heading
+              $res .= "<h5 class='mb-2'><u>Circuit Training</u></h5>\n";
               $workout = $Circuit_Training[0] + $workout;
             } else if (count($Cycling) > 0) {
-              $res .= "<u>Cycling</u> <br>\n";
+              $res .= "<h5 class='mb-2'><u>Cycling</u></h5>\n";
               $workout = $Cycling[0] + $workout;
-            } else if (count($Flexibility_Training) > 0){
-              $res .= "<u>Flexibility Training</u> <br>\n";
+            } else if ($hasFlex){
+              $res .= "<h5 class='mb-2'><u>Flexibility Training</u></h5>\n";
               $workout = $Flexibility_Training[0] + $workout;
             } else if (count($Hiking) > 0){
-              $res .= "<u>Hiking</u> <br>\n";
+              $res .= "<h5 class='mb-2'><u>Hiking</u></h5>\n";
               $workout = $Hiking[0] + $workout;
             } else if (count($Playing_a_Sport) > 0){
-              $res .= "<u>Playing a Sport</u> <br>\n";
+              $res .= "<h5 class='mb-2'><u>Playing a Sport</u></h5>\n";
               $workout = $Playing_a_Sport[0] + $workout;
             } else if (count($Run) > 0){
-              $res .= "<u>Run</u> <br>\n";
+              $res .= "<h5 class='mb-2'><u>Run</u></h5>\n";
               $workout = $Run[0] + $workout;
-            } else if (count($Strength_Training) > 0){
-              $res .= "<u>Strength Training</u> <br>\n";
+            } else if ($hasStrength){
+              $res .= "<h5 class='mb-2'><u>Strength Training</u></h5>\n";
               $workout = $Strength_Training[0] + $workout;
             } else if (count($Swim) > 0) {
-              $res .= "<u>Swim</u> <br>\n";
+              $res .= "<h5 class='mb-2'><u>Swim</u></h5>\n";
               $workout = $Swim[0] + $workout;
             } else if (count($Water_Sports) > 0){
-              $res .= "<u>Water Sports</u> <br>\n";
+              $res .= "<h5 class='mb-2'><u>Water Sports</u></h5>\n";
               $workout = $Water_Sports[0] + $workout;
             }
 
+            // Build general info block once from merged $workout
+            $generalInfo = "";
+            foreach ($workout as $key => $value) {
+              if (is_int($key)) {
+
+              } 
+              elseif ($key != "WorkoutID" && $key != "Date" && $key != "UserID" && $key != "Privacy") {
+                $visibleKey = str_replace('_', ' ', $key);
+                if ($key == "Duration") {
+                  $visibleKey = "Total Duration";
+                }
+                $generalInfo .= "<div><span class='muted'>" . ucwords($visibleKey) . "</span>: <strong>" . $value;
+                if ($key == "Duration") {
+                  $generalInfo .= " minutes";
+                }
+                $generalInfo .= "</strong></div>\n";
+              }
+            }
+
+            // For sub-workout types, show general info first, then a divider, then list items
+            if ($hasCircuit || $hasFlex || $hasStrength) {
+              $res .= $generalInfo;
+              $res .= "<hr class='subitem-divider'>";
+            }
+
             // adds individual exercises/stretches
-            if (count($Circuit_Training) > 0) {
+            if ($hasCircuit) {
+              $res .= "<div class='mt-2 mb-1'><em>Exercises</em></div>";
+              $res .= "<hr class='subitem-divider'>";
               $Circuit_Exercises = getCircuitExercises($workout['WorkoutID']);
               foreach ($Circuit_Exercises as $exercise) {
                 foreach ($exercise as $key => $value) {
@@ -153,19 +183,19 @@ $currentFilter = $_SERVER["REQUEST_METHOD"] == "POST" ? $_POST['privacyFilter'] 
                     if ($visibleKey == "Type") {
                       $visibleKey = "Exercise";
                     }
-                    $res .= ucwords($visibleKey); 
-                    $res .= ": "; 
-                    $res .= $value;
+                    $res .= "<div><span class='muted'>" . ucwords($visibleKey) . "</span>: <strong>" . $value;
                     if ($visibleKey == "Amount") {
-                      $res .= " ";
-                      $res .= lcfirst($exercise['Reps_or_Seconds']);
+                      $res .= " " . lcfirst($exercise['Reps_or_Seconds']);
                     }
-                    $res .= "<br>\n";
+                    $res .= "</strong></div>\n";
                   }
                 }
+                $res .= "<hr class='subitem-divider'>";
               }
             }
-            elseif (count($Flexibility_Training) > 0) {
+            elseif ($hasFlex) {
+              $res .= "<div class='mt-2 mb-1'><em>Stretches</em></div>";
+              $res .= "<hr class='subitem-divider'>";
               $Flexibility_Stretches = getFlexibilityStretches($workout['WorkoutID']);
               foreach ($Flexibility_Stretches as $stretch) {
                 foreach ($stretch as $key => $value) {
@@ -177,15 +207,15 @@ $currentFilter = $_SERVER["REQUEST_METHOD"] == "POST" ? $_POST['privacyFilter'] 
                     if ($visibleKey == "Type") {
                       $visibleKey = "Stretch";
                     }
-                    $res .= ucwords($visibleKey); 
-                    $res .= ": "; 
-                    $res .= $value;
-                    $res .= "<br>\n";
+                    $res .= "<div><span class='muted'>" . ucwords($visibleKey) . "</span>: <strong>" . $value . "</strong></div>\n";
                   }
                 }
+                $res .= "<hr class='subitem-divider'>";
               }
             }
-            elseif (count($Strength_Training) > 0) {
+            elseif ($hasStrength) {
+              $res .= "<div class='mt-2 mb-1'><em>Exercises</em></div>";
+              $res .= "<hr class='subitem-divider'>";
               $Strength_Exercises = getStrengthExercises($workout['WorkoutID']);
               foreach ($Strength_Exercises as $exercise) {
                 foreach ($exercise as $key => $value) {
@@ -194,32 +224,16 @@ $currentFilter = $_SERVER["REQUEST_METHOD"] == "POST" ? $_POST['privacyFilter'] 
                   } 
                   elseif ($key != "WorkoutID") {
                     $visibleKey = str_replace('_', ' ', $key);
-                    $res .= ucwords($visibleKey); 
-                    $res .= ": "; 
-                    $res .= $value;
-                    $res .= "<br>\n";
+                    $res .= "<div><span class='muted'>" . ucwords($visibleKey) . "</span>: <strong>" . $value . "</strong></div>\n";
                   }
                 }
+                $res .= "<hr class='subitem-divider'>";
               }
             }
 
-            foreach ($workout as $key => $value) {
-              if (is_int($key)) {
-
-              } 
-              elseif ($key != "WorkoutID" && $key != "Date" && $key != "UserID" && $key != "Privacy") {
-                $visibleKey = str_replace('_', ' ', $key);
-                if ($key == "Duration") {
-                  $visibleKey = "Total Duration";
-                }
-                $res .= ucwords($visibleKey); 
-                $res .= ": "; 
-                $res .= $value;
-                if ($key == "Duration") {
-                  $res .= " minutes";
-                }
-                $res .= "<br>\n";
-              }
+            // For non-subworkout types, show general info after heading
+            if (!$hasCircuit && !$hasFlex && !$hasStrength) {
+              $res .= $generalInfo;
             }
 
             echo $res;

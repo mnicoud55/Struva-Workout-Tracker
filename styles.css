@@ -191,6 +191,13 @@ input:focus, select:focus, textarea:focus {
   color: var(--color-subtle);
 }
 
+/* Thin divider for sub-items within workout cards */
+.subitem-divider {
+  border: 0;
+  border-top: 1px solid rgba(148,163,184,0.18);
+  margin: 8px 0;
+}
+
 /* Footer */
 .primary-footer {
   background: var(--color-elevated) !important;
