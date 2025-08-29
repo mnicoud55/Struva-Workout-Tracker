@@ -50,24 +50,10 @@ $list_of_U001_friends = LoadFriends($_COOKIE['user']);
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">  
   <!-- <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"> -->
   <link rel="stylesheet" href="dashboard.css">
+  <link rel="stylesheet" href="styles.css">
   <link rel="icon" type="image/png" href="http://www.cs.virginia.edu/~up3f/cs4750/images/db-icon.png" />
   <style>
-        body {
-            background-color: lightgray;
-        }
-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-table, th, td {
-    border: 1px solid black;
-}
-
-th, td {
-    padding: 8px;
-    text-align: left;
-}
+        body { }
 
         </style>
   </head>
@@ -77,15 +63,20 @@ th, td {
   <?php include("header.html"); ?>  
 
   <!-- Add Friend Bar -->
-  <form action="friendpage.php" method="post">
-    <input type="text" name="search_term" placeholder="Enter UserID or Name">
-    <input type="submit" name="search" value="Search">
-  </form>
+  <div class="container container-narrow">
+    <div class="card-modern mb-3">
+      <form action="friendpage.php" method="post" class="form-modern">
+        <input type="text" name="search_term" placeholder="Enter UserID or Name">
+        <input type="submit" name="search" value="Search" class="btn btn-modern">
+      </form>
+    </div>
+  </div>
   
   
   <!-- Display Search Results -->
   <?php if (!empty($searchResults)): ?>
-    <table>
+    <div class="container container-narrow">
+    <table class="table-modern">
       <thead>
         <tr>
           <th>User ID</th>
@@ -101,18 +92,20 @@ th, td {
             <td>
               <form action="friendpage.php" method="post">
               <input type="hidden" name="target_user_id" value="<?= htmlspecialchars($user['UserID']) ?>">
-                <input type="submit" name="send_request" value="Send Friend Request">
+                <input type="submit" name="send_request" value="Send Friend Request" class="btn btn-modern">
               </form>
             </td>
           </tr>
         <?php endforeach; ?>
       </tbody>
     </table>
+    </div>
   <?php endif; ?>
   <?php if (empty($searchResults)): ?>
-    No Found Results
+    <div class="container container-narrow muted">No Found Results</div>
     <?php endif; ?>
-  <table>
+  <div class="container container-narrow mt-3">
+  <table class="table-modern">
     <thead>
         <tr>
             <th>Current Friend Requests</th>
@@ -145,7 +138,8 @@ th, td {
 
     </tbody>
 </table>
-<table>
+
+<table class="table-modern mt-3">
         <thead>
             <tr>
                 <th>Sent Friend Requests</th>
@@ -163,7 +157,7 @@ th, td {
         </tbody>
     </table>
 
-<table>
+<table class="table-modern mt-3">
     <thead>
         <tr>
             <th>Friend List: </th>
@@ -183,6 +177,7 @@ th, td {
     ?>
     </tbody>
 </table>
+  </div>
 
 
 

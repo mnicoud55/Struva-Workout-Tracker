@@ -4,10 +4,14 @@
       background-color: rgb(14, 14, 109); /* You can replace 'blue' with any shade of blue you prefer */
   }
   </style>
-  <nav class="navbar navbar-expand-md navbar-dark bg-blue">
- 
+  <nav class="navbar navbar-expand-md navbar-dark bg-blue shadow-sm">
+
       <div class="container-fluid">            
         <a class="navbar-brand" href="mainpage.php">STRUVA</a>
+        <button id="themeToggle" class="btn btn-sm btn-modern" type="button" style="margin-right:10px;">Toggle Theme</button>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar" aria-controls="collapsibleNavbar" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
         <div class="collapse navbar-collapse" id="collapsibleNavbar">
           <ul class="navbar-nav ms-auto">
             <li class="nav-item">
@@ -26,4 +30,31 @@
         </div>
       </div>
     </nav>
+    <script>
+      (function() {
+        try {
+          var root = document.documentElement;
+          var saved = localStorage.getItem('struva-theme');
+          if (saved === 'light') {
+            root.setAttribute('data-theme', 'light');
+          }
+        } catch (e) {}
+      })();
+
+      document.addEventListener('DOMContentLoaded', function() {
+        var btn = document.getElementById('themeToggle');
+        if (!btn) return;
+        btn.addEventListener('click', function() {
+          var root = document.documentElement;
+          var isLight = root.getAttribute('data-theme') === 'light';
+          if (isLight) {
+            root.removeAttribute('data-theme');
+            try { localStorage.setItem('struva-theme', 'dark'); } catch(e) {}
+          } else {
+            root.setAttribute('data-theme', 'light');
+            try { localStorage.setItem('struva-theme', 'light'); } catch(e) {}
+          }
+        });
+      });
+    </script>
   </header>

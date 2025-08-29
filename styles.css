@@ -1,0 +1,241 @@
+/* Global Modern Styles for Struva - non-invasive additions */
+
+:root {
+  --color-bg: #0f172a; /* slate-900 */
+  --color-surface: #111827; /* gray-900 */
+  --color-card: #0b1220; /* deep */
+  --color-elevated: #111827; 
+  --color-primary: #38bdf8; /* sky-400 */
+  --color-primary-600: #0284c7; /* sky-600 */
+  --color-accent: #22d3ee; /* cyan-400 */
+  --color-text: #e5e7eb; /* gray-200 */
+  --color-subtle: #94a3b8; /* slate-400 */
+  --ring: 0 0 0 3px rgba(56, 189, 248, 0.35);
+  --radius: 14px;
+  --shadow-soft: 0 10px 30px rgba(0,0,0,0.3);
+  --shadow-card: 0 6px 22px rgba(0,0,0,0.35);
+}
+
+html, body {
+  background: radial-gradient(1200px 600px at 10% -10%, rgba(56,189,248,0.12), transparent 60%),
+              radial-gradient(1000px 500px at 100% 0%, rgba(34,211,238,0.10), transparent 60%),
+              var(--color-bg);
+  color: var(--color-text);
+}
+
+/* Make footer sit at bottom when content is short, without fixing it */
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Light theme variant */
+[data-theme="light"] {
+  --color-bg: #e9eef5; /* soft slate/blue gray */
+  --color-surface: #f3f6fb; /* soft surface */
+  --color-card: #ffffff;
+  --color-elevated: #ffffff;
+  --color-primary: #0ea5e9; /* sky-500 */
+  --color-primary-600: #0284c7; /* sky-600 */
+  --color-accent: #22d3ee; /* cyan-400 */
+  --color-text: #0b1220;
+  --color-subtle: #334155; /* slate-700 */
+}
+
+[data-theme="light"] html,[data-theme="light"] body {
+  background: radial-gradient(1200px 600px at 10% -10%, rgba(14,165,233,0.12), transparent 60%),
+              radial-gradient(1000px 500px at 100% 0%, rgba(34,211,238,0.08), transparent 60%),
+              var(--color-bg);
+}
+
+/* Typography */
+body, input, button, select, textarea {
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+h1,h2,h3,h4,h5 {
+  color: var(--color-text);
+}
+
+/* Navbar */
+.bg-blue {
+  background: linear-gradient(180deg, rgba(2,132,199,0.25), rgba(2,132,199,0.15)) !important;
+  backdrop-filter: saturate(130%) blur(6px);
+  border-bottom: 1px solid rgba(148,163,184,0.15);
+}
+
+[data-theme="light"] .bg-blue {
+  background: linear-gradient(180deg, rgba(2,132,199,0.15), rgba(2,132,199,0.08)) !important;
+}
+
+.navbar.navbar-dark .navbar-brand {
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+.navbar.navbar-dark .nav-link {
+  color: var(--color-text) !important;
+  opacity: 0.85;
+}
+
+.navbar.navbar-dark .nav-link:hover {
+  opacity: 1;
+}
+
+/* Cards */
+.card-modern {
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border: 1px solid rgba(148,163,184,0.12);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+  padding: 22px;
+}
+
+.card-modern .card-header {
+  border-bottom: 1px solid rgba(148,163,184,0.15);
+  margin-bottom: 14px;
+}
+
+/* Buttons */
+.btn-modern, .add-workout-btn {
+  background: linear-gradient(180deg, var(--color-primary), var(--color-primary-600));
+  color: #001018 !important;
+  font-weight: 700;
+  border: none !important;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(2,132,199,0.35);
+}
+
+.btn-modern:hover, .add-workout-btn:hover {
+  filter: brightness(1.05);
+}
+
+.btn-outline-info {
+  color: var(--color-text);
+  border-color: rgba(148,163,184,0.35);
+}
+
+.btn-outline-info.active, .btn-outline-info:focus {
+  color: #001018;
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  box-shadow: var(--ring);
+}
+
+/* Forms */
+.form-modern input[type="text"],
+.form-modern input[type="password"],
+.form-modern input[type="number"],
+.form-modern input[type="date"],
+.form-modern select,
+.form-modern textarea,
+form input[type="text"],
+form input[type="password"],
+form input[type="number"],
+form input[type="date"],
+form select,
+form textarea {
+  background: rgba(2,6,23,0.6);
+  color: var(--color-text);
+  border: 1px solid rgba(148,163,184,0.2);
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  box-shadow: var(--ring);
+  border-color: var(--color-primary) !important;
+}
+
+/* Tables */
+.table-modern {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border: 1px solid rgba(148,163,184,0.12);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.table-modern thead {
+  background: rgba(2,132,199,0.12);
+}
+
+.table-modern th, .table-modern td {
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(148,163,184,0.12);
+}
+
+.table-modern tr:last-child td {
+  border-bottom: none;
+}
+
+/* Utility */
+.container-narrow {
+  max-width: 860px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.auth-wrapper {
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.muted {
+  color: var(--color-subtle);
+}
+
+/* Footer */
+.primary-footer {
+  background: var(--color-elevated) !important;
+  border-top: 1px solid rgba(148,163,184,0.25);
+}
+
+.primary-footer {
+  margin-top: auto; /* push footer to bottom when page is short */
+}
+
+/* Floating action button for Add Workout on feed */
+.add-workout-fab {
+  position: fixed;
+  right: 20px;
+  bottom: 60px; /* lifted to avoid overlapping footer */
+  z-index: 1030;
+  padding: 14px 28px; /* bigger button */
+  font-size: 1.125rem; /* slightly larger text */
+  border-radius: 12px; /* keep rectangular, not pill */
+}
+
+@media (max-width: 600px) {
+  .add-workout-fab {
+    right: 12px;
+    bottom: 72px; /* lifted on small screens too */
+    padding: 12px 20px;
+    font-size: 1rem;
+  }
+}
+
+/* Footer participates in normal document flow (not fixed) */
+
+/* Floating theme toggle for pages without shared header */
+.theme-toggle-fab {
+  position: fixed;
+  right: 16px;
+  bottom: 80px; /* above footer */
+  z-index: 1040;
+  border: none;
+  border-radius: 9999px;
+  padding: 10px 14px;
+  background: linear-gradient(180deg, var(--color-primary), var(--color-primary-600));
+  color: #001018;
+  box-shadow: 0 8px 24px rgba(2,132,199,0.35);
+  cursor: pointer;
+}
+
+

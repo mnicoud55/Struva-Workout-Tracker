@@ -52,68 +52,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">  
   <!-- <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"> -->
   <link rel="stylesheet" href="dashboard.css">
+  <link rel="stylesheet" href="styles.css">
   <link rel="icon" type="image/png" href="http://www.cs.virginia.edu/~up3f/cs4750/images/db-icon.png" />
   <style>
-        body {
-            background-color: lightgray;
-        }
-        /* Style for the button group to have black borders */
-.btn-group .btn {
-    border: 1px solid black;
-}
-
-/* Style for the active button */
-.active {
-    text-decoration: underline;
-    font-weight: bold;
-}
-.btn-group {
-  display: flex;
-    justify-content: center;
-}
-/* Remove rounded corners for a more seamless look */
-.btn-group .btn {
-    border-radius: 0;
-}
-.workout-card {
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    padding: 15px;
-    background-color: #f9f9f9;
-  }
-
-  .card-header {
-    border-bottom: 1px solid #eee;
-    padding-bottom: 10px;
-    margin-bottom: 10px;
-  }
-
-  .card-body p {
-    margin: 0 0 10px;
-  }
-
-  .container {
-    max-width: 800px;
-    margin: auto;
-  }
-  .add-workout-btn {
-    position: fixed; /* Stick it to a position */
-    left: 20px; /* Distance from left */
-    bottom: 20px; /* Distance from bottom */
-    padding: 10px 20px; /* Padding inside the button */
-    background-color: #007bff; /* Button color */
-    color: white; /* Text color */
-    text-decoration: none; /* Remove underline from the link */
-    border-radius: 5px; /* Rounded corners */
-    box-shadow: 0 2px 5px rgba(0,0,0,0.3); /* Shadow effect */
-    z-index: 1000; /* Make sure it's on top of other elements */
-    transition: background-color 0.3s; /* Smooth color transition */
-}
-
-.add-workout-btn:hover {
-    background-color: #0056b3; /* Change color on hover */
-}
+        body { }
 
     </style>
 </head>
@@ -133,21 +75,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 $currentFilter = $_SERVER["REQUEST_METHOD"] == "POST" ? $_POST['privacyFilter'] : 'public';
 ?>
 <!-- Form for the buttons to select the filters -->
-<form action="mainpage.php" method="post">
-<div class="btn-group" role="group" aria-label="Filter Buttons">
+<form action="mainpage.php" method="post" class="mb-3" style="display:flex;justify-content:center;">
+  <div class="btn-group" role="group" aria-label="Filter Buttons">
     <button type="submit" name="privacyFilter" value="public" class="btn btn-outline-info btn-lg <?php echo $currentFilter == 'public' ? 'active' : ''; ?>">Public</button>
     <button type="submit" name="privacyFilter" value="friends" class="btn btn-outline-info btn-lg <?php echo $currentFilter == 'friends' ? 'active' : ''; ?>">Friends</button>
     <button type="submit" name="privacyFilter" value="private" class="btn btn-outline-info btn-lg <?php echo $currentFilter == 'private' ? 'active' : ''; ?>">Personal</button>
-</div>
-
+  </div>
 </form>
   <!--Cards to display each of the workouts that are fetched -->
-<div class="container">
+<div class="container container-narrow">
   <h1><b>Workout Feed</b></h1>  
   <hr/>
   <div class="row">
     <?php foreach ($results as $workout): ?>
-      <div class="workout-card">
+      <div class="workout-card card-modern">
         <div class="card-header">
           <h3><?php echo getNameFromID($workout['UserID'])?><h3>
           <h4><?php echo $workout['UserID']; ?></h4>
@@ -296,8 +237,8 @@ $currentFilter = $_SERVER["REQUEST_METHOD"] == "POST" ? $_POST['privacyFilter'] 
       </div>
     <?php endforeach; ?>
   </div>
-  <!-- Add Workout Button -->
-<a href="add_workout.php" class="add-workout-btn">Add Workout+</a>
+  <!-- Add Workout Button (floating) -->
+<a href="add_workout.php" class="btn btn-modern add-workout-fab">Add a Workout+</a>
 </div>
 
 
@@ -309,7 +250,7 @@ $currentFilter = $_SERVER["REQUEST_METHOD"] == "POST" ? $_POST['privacyFilter'] 
   <!-- <script src="your-js-file.js"></script> -->  
   
 </div> 
-<a href="add_workout.php" class="add-workout-btn">Add Workout+</a>
+<!-- <a href="add_workout.php" class="add-workout-btn">Add Workout+</a> -->
 
 
 <?php 

@@ -1,6 +1,7 @@
 <?php
 require("connect-db.php");
 require("account-db.php");
+ob_start();
 ?>
 
 
@@ -10,7 +11,7 @@ require("account-db.php");
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">  
-  
+  <link rel="stylesheet" href="styles.css">
   <title>STRUVA</title>    
     <style>
       a:hover { background-color:white; }
@@ -28,12 +29,18 @@ as script -- leading to unnecessary computation time.
 Good practice: try to separate HTML code from the PHP. The code may look strange, jumping in and out the PHP mode, 
 but it yields better performance.    
  -->       
-<div class="container">
-    <h1>Welcome, please fill out the information below to create an account</h1>
-    <form action="<?php $_SERVER['PHP_SELF'] ?>" method="post">
-        Username: <input type="text" name="username" class="form-control" autofocus required /> <br/>
-        Password: <input type="password" name="pwd" class="form-control" required /> <br/>
-        Name: <input type="text" name="name" class="form-control" required /> <br/>
+<div class="auth-wrapper">
+  <div class="container container-narrow">
+    <div class="card-modern">
+      <h1 class="mb-2">Create your STRUVA account</h1>
+      <p class="muted mb-3">Fill the fields below to get started</p>
+      <form action="<?php $_SERVER['PHP_SELF'] ?>" method="post" class="form-modern">
+        Username:
+        <input type="text" name="username" class="form-control" autofocus required /> <br/>
+        Password:
+        <input type="password" name="pwd" class="form-control" required /> <br/>
+        Name:
+        <input type="text" name="name" class="form-control" required /> <br/>
         Height: <select name="height_ft">
                 <option value=2>2</option>
                 <option value=3>3</option>
@@ -65,8 +72,11 @@ but it yields better performance.
                 <option value="Female">Female</option>
                 <option value="other/do not wish to disclose">Other / do not wish to disclose</option>
             </select> <br/> <br/>
-        <input type="submit" value="Create account" class="btn btn-light"  /> 
-    </form>
+        <input type="submit" value="Create account" class="btn btn-modern"  /> 
+      </form>
+    </div>
+  </div>
+</div>
 
     <?php
 // When an HTML form is submitted to the server using the post method,
@@ -190,9 +200,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST" && strlen($_POST['username']) > 0)
 
     }
 }
+ob_end_flush();
 ?>
-
-
-
 </body>
 </html>

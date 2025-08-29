@@ -95,6 +95,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>Add Workout</title>
     <link rel="stylesheet" href="dashboard.css"> <!-- Link your existing CSS file -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
     <style>
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
@@ -160,7 +161,9 @@ input[type="submit"]:hover {
     <?php echo $to_echo;?>
 
     <!-- Content goes here -->
-    <form action="add_workout.php" method="post" id="workoutForm">
+    <div class="container container-narrow">
+    <div class="card-modern">
+    <form action="add_workout.php" method="post" id="workoutForm" class="form-modern">
         <!-- Dropdown for selecting workout type -->
         <select name="workoutType" id="workoutType" onchange="showAdditionalFields()">
     <option value="">Select Workout Type</option>
@@ -193,8 +196,10 @@ input[type="submit"]:hover {
         <!-- Additional fields will be displayed here -->
         <div id="additionalFields"></div>
 
-        <input type="submit" value="Add Workout">
+        <input type="submit" value="Add Workout" class="btn btn-modern">
     </form>
+    </div>
+    </div>
     <script>
     function showAdditionalFields() {
         var workoutType = document.getElementById("workoutType").value;

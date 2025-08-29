@@ -28,109 +28,13 @@ if (!isset($_COOKIE['user']))
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">  
   <!-- <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"> -->
   <link rel="stylesheet" href="dashboard.css">
+  <link rel="stylesheet" href="styles.css">
   <link rel="icon" type="image/png" href="http://www.cs.virginia.edu/~up3f/cs4750/images/db-icon.png" />
   <style>
-        body {
-    font-family: 'Open Sans', sans-serif;
-    background-color: lightgray;
-    color: #333;
-    line-height: 1.6;
-}
-
-.container {
-    width: 80%;
-    margin: auto;
-    overflow: hidden;
-}
-
-.card {
-    background: #fff;
-    padding: 20px;
-    margin-bottom: 20px;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.profile-img {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    margin: 20px auto;
-}
-
-input[type='text'], input[type='number'], input[type='date'] {
-    width: 100%;
-    padding: 10px;
-    margin: 8px 0;
-    display: inline-block;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-}
-
-input[type='submit'] {
-    width: 100%;
-    background-color: #4CAF50;
-    color: white;
-    padding: 14px 20px;
-    margin: 8px 0;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-input[type='submit']:hover {
-    background-color: #45a049;
-}
-
-@media screen and (max-width: 600px) {
-    .container {
-        width: 100%;
-    }
-}
-.username-display {
-  font-size: 24px; /* Larger font size */
-  color: #333333; /* Dark text color for readability */
-  font-weight: bold; /* Bold font for emphasis */
-  text-align: center; /* Center align if it's at the top of the page */
-  padding: 10px; /* Padding for spacing */
-  margin-top: 10px; /* Space from the top of the page */
-  background-color: #f0f0f0; /* Light background to stand out */
-  border-radius: 5px; /* Rounded corners for aesthetics */
-  width: fit-content; /* Fit to the size of the content */
-  margin-left: auto; /* These two margins are for centering */
-  margin-right: auto; /* the element if it's a block element */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-}
-.workout-item {
-    display: flex;
-    align-items: center;
-    justify-content: start;
-    margin-bottom: 10px; /* Space between items */
-}
-
-.workout-number {
-    margin-right: 10px; /* Space between number and button */
-    font-weight: bold; /* Make number bold */
-}
-
-.delete-form {
-    display: inline; /* Inline form for alignment */
-}
-
-.delete-button {
-    background-color: red;
-    color: white;
-    border: none;
-    padding: 5px 10px; /* Smaller padding */
-    border-radius: 5px; /* Rounded corners */
-    font-size: 0.8em; /* Smaller font size */
-    cursor: pointer; /* Cursor change to indicate clickable */
-}
-
-.delete-button:hover {
-    background-color: darkred;
-}
+        body { }
+        .container { }
+        .profile-img { width: 100px; height: 100px; border-radius: 50%; margin: 20px auto; }
+        .username-display { margin-top: 10px; }
 
 
         </style>
@@ -215,13 +119,15 @@ $userData = getUserInfo($_COOKIE['user']);
 $list_of_workouts = array_reverse(getPersonalWorkouts($_COOKIE['user']));
 ?>
 
-<div class="username-display">
+<div class="username-display card-modern container-narrow" style="text-align:center;">
   <?php echo htmlspecialchars($_COOKIE['user']); ?>
 </div>
 
 
 <!-- User Information Update Form -->
-<form action="profilepage.php" method="post">
+<div class="container container-narrow">
+<div class="card-modern mb-3">
+<form action="profilepage.php" method="post" class="form-modern">
 Name: <input type="text" name="name" value="<?php echo isset($userData['Name']) ? htmlspecialchars($userData['Name']) : ''; ?>"><br>
   Height (ft): <input type="number" name="height_ft" value="<?php echo isset($userData['Height_ft']) ? htmlspecialchars($userData['Height_ft']) : ''; ?>"min ="0" max="8"> 
   (in): <input type="number" name="height_in" value="<?php echo isset($userData['Height_in']) ? htmlspecialchars($userData['Height_in']) : ''; ?>" min="0" max="11"><br>
@@ -229,24 +135,28 @@ Name: <input type="text" name="name" value="<?php echo isset($userData['Name']) 
   Date of Birth: <input type="date" name="dob" value="<?php echo isset($userData['DOB']) ? htmlspecialchars($userData['DOB']) : ''; ?>"><br>
   Gender: <input type="text" name="gender" value="<?php echo isset($userData['Gender']) ? htmlspecialchars($userData['Gender']) : ''; ?>"><br>
   <input type="hidden" name="form_type" value="update_info">
-  <input type="submit" value="Update">
+  <input type="submit" value="Update" class="btn btn-modern">
 </form>
+</div>
+
 <div class="container">
   <h1><b>Personal Workouts</b></h1>  
   <hr/>
   <div class="row">
     <?php foreach ($list_of_workouts as $workout): ?>
-        <div class="workout-item">
+        <div class="workout-item card-modern" style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
             <span class="workout-number"><?php echo $workout['WorkoutID']; ?></span>
             <form action="profilepage.php" method="post" class="delete-form">
                 <input type="hidden" name="workout_id" value="<?php echo $workout['WorkoutID']; ?>">
                 <input type="hidden" name="form_type" value="delete_workout">
-                <input type="submit" value="Delete Workout" class="delete-button">
+                <input type="submit" value="Delete Workout" class="btn btn-danger">
             </form>
         </div>
         <br>
     <?php endforeach; ?>
   </div> 
+</div>
+
 </div>
 
 
