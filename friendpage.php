@@ -27,7 +27,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $searchResults = SearchUsers($searchTerm); // Function to search users based on input
     } elseif (isset($_POST['send_request'])) {
         $targetUserID = $_POST['target_user_id'];
-        SendFriendRequest($_COOKIE['user'], $targetUserID); // Assuming "U001" is the ID of the current user
+        // Guard against sending to self, duplicates, and existing friendships
+        $incoming = LoadFriendRequests($_COOKIE['user']); // requests sent to me
+        $outgoing = PendingSentFriendRequests($_COOKIE['user']); // requests I sent
+        $friends  = LoadFriends($_COOKIE['user']);
+
+        $incomingIds = array_map(function($row){ return $row['sent_request_id']; }, $incoming);
+        $outgoingIds = array_map(function($row){ return $row['received_request_id']; }, $outgoing);
+        $friendIds   = array_map(function($row){ return $row['friend2_id']; }, $friends);
+
+        if ($targetUserID !== $_COOKIE['user']
+            && !in_array($targetUserID, $friendIds)
+            && !in_array($targetUserID, $incomingIds)
+            && !in_array($targetUserID, $outgoingIds)) {
+            SendFriendRequest($_COOKIE['user'], $targetUserID);
+        }
         // Optionally, handle redirection or success message here
     }
 }
@@ -37,6 +51,10 @@ $sentRequests = PendingSentFriendRequests($_COOKIE['user']);
 
 $list_of_U001_requests = LoadFriendRequests($_COOKIE['user']);
 $list_of_U001_friends = LoadFriends($_COOKIE['user']);
+// Precompute helper arrays for quick checks in search results
+$friendIds = array_map(function($row){ return $row['friend2_id']; }, $list_of_U001_friends);
+$incomingRequestIds = array_map(function($row){ return $row['sent_request_id']; }, $list_of_U001_requests);
+$outgoingRequestIds = array_map(function($row){ return $row['received_request_id']; }, $sentRequests);
 ?>
 <!DOCTYPE html>
 <html>
@@ -90,10 +108,25 @@ $list_of_U001_friends = LoadFriends($_COOKIE['user']);
             <td><?= htmlspecialchars($user['UserID']) ?></td>
             <td><?= htmlspecialchars($user['Name']) ?></td>
             <td>
-              <form action="friendpage.php" method="post">
-              <input type="hidden" name="target_user_id" value="<?= htmlspecialchars($user['UserID']) ?>">
-                <input type="submit" name="send_request" value="Send Friend Request" class="btn btn-modern">
-              </form>
+              <?php 
+                $targetId = $user['UserID'];
+                $isSelf = ($targetId === $_COOKIE['user']);
+                $isFriend = in_array($targetId, $friendIds);
+                $hasPending = in_array($targetId, $incomingRequestIds) || in_array($targetId, $outgoingRequestIds);
+
+                if ($isSelf) {
+                    echo '<span class="muted">This is you</span>';
+                } elseif ($isFriend) {
+                    echo '<span class="muted">Already friends</span>';
+                } elseif ($hasPending) {
+                    echo '<span class="muted">Friend request pending</span>';
+                } else {
+              ?>
+                <form action="friendpage.php" method="post">
+                  <input type="hidden" name="target_user_id" value="<?= htmlspecialchars($user['UserID']) ?>">
+                  <input type="submit" name="send_request" value="Send Friend Request" class="btn btn-modern">
+                </form>
+              <?php } ?>
             </td>
           </tr>
         <?php endforeach; ?>
