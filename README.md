@@ -1,10 +1,8 @@
-Group Members / Contributors: Justin Brady (https://github.com/jbrady1203), Glenn Hogan (https://github.com/glennhogan), and Matthew Nicoud (https://github.com/mnicoud55).
+Description: A social workout tracker web application completed in a group for CS 4750 (Database Systems) at the University of Virginia, extended beyond education for personal practice and usage. Document your workouts, add friends, and get inspired for your next workout with public, personal, and friend feeds!
 
-Description: A social workout tracker web application completed for CS 4750 (Database Systems) at the University of Virginia, extended beyond education for personal practice and usage.
+Interactive Website: https://struva-workout-tracker-309878984293.us-east4.run.app/
 
-Interactive Website: https://www.cs.virginia.edu/~jmb4zz/CS4750_final_deliverable/login.php
-
-1. To run the project locally using docker: 
+1. To run the project locally using Docker: 
 ```bash
 docker compose up --build
 ```

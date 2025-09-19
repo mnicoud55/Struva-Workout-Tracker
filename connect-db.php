@@ -1,16 +1,27 @@
 <?php
-// db.php
+// connect-db.php
 $host = getenv('DB_HOST');
 $port = getenv('DB_PORT');
 $dbname = getenv('DB_NAME');
 $user = getenv('DB_USER');
 $password = getenv('DB_PASS');
-$ssl_ca_content = getenv('SSL_CA'); // contents of ca.pem
 
-// Write SSL CA to a temporary file
-$ssl_ca_path = '/tmp/db-ca.pem';
-if ($ssl_ca_content) {
-    file_put_contents($ssl_ca_path, $ssl_ca_content);
+// Detect Cloud Run by presence of K_SERVICE
+$isCloudRun = getenv('K_SERVICE') !== false;
+
+$options = [
+    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+];
+
+if ($isCloudRun) {
+    // Get SSL cert contents from Secret Manager 
+    $ssl_ca_content = getenv('SSL_CA');
+    if ($ssl_ca_content) {
+        $ssl_ca_path = '/tmp/db-ca.pem';
+        file_put_contents($ssl_ca_path, $ssl_ca_content);
+
+        $options[PDO::MYSQL_ATTR_SSL_CA] = $ssl_ca_path;
+    }
 }
 
 try {
@@ -18,10 +29,7 @@ try {
         "mysql:host=$host;port=$port;dbname=$dbname;charset=utf8mb4",
         $user,
         $password,
-        [
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-            PDO::MYSQL_ATTR_SSL_CA => $ssl_ca_path,//__DIR__ . '/ca.pem',
-        ]
+        $options
     );
 } catch (PDOException $e) {
     die("Database connection failed: " . $e->getMessage());
