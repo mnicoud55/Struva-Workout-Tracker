@@ -7,9 +7,11 @@ $user = getenv('DB_USER');
 $password = getenv('DB_PASS');
 $ssl_ca_content = getenv('SSL_CA'); // contents of ca.pem
 
-// write to temp file
+// Write SSL CA to a temporary file
 $ssl_ca_path = '/tmp/db-ca.pem';
-file_put_contents($ssl_ca_path, $ssl_ca_content);
+if ($ssl_ca_content) {
+    file_put_contents($ssl_ca_path, $ssl_ca_content);
+}
 
 try {
     $db = new PDO(
@@ -18,7 +20,7 @@ try {
         $password,
         [
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-            PDO::MYSQL_ATTR_SSL_CA => __DIR__ . '/ca.pem',
+            PDO::MYSQL_ATTR_SSL_CA => $ssl_ca_path,//__DIR__ . '/ca.pem',
         ]
     );
 } catch (PDOException $e) {
